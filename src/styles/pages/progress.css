@@ -1,0 +1,554 @@
+/*
+ * Страница прогресса
+ * Выбор курса, готовность, слабые темы и рекомендации.
+ */
+
+.course-select {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.course-select select {
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 6px;
+  padding: 11px 32px 11px 12px;
+  color: #38352f;
+  max-width: 100%;
+}
+
+.progress-layout {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 320px;
+  gap: 38px;
+}
+
+.readiness {
+  background: #f1eee7;
+  padding: 28px;
+  border-radius: 9px;
+  margin-bottom: 34px;
+}
+
+.readiness .large-value {
+  margin: 5px 0 18px;
+}
+
+.readiness p {
+  font-size: 12px;
+  margin: 14px 0 0;
+}
+
+.progress-layout .topic-progress {
+  width: 85px;
+}
+
+.progress-layout .topic-row h3 {
+  font-size: 14px;
+}
+
+.progress-layout .topic-row p {
+  font-size: 12px;
+}
+
+.weak-panel {
+  border: 1px solid #e8d9ca;
+  background: #fbf5ee;
+  border-radius: 9px;
+  padding: 24px;
+}
+
+.weak-panel h2,
+.recommended h2 {
+  font-size: 17px;
+  margin-bottom: 10px;
+}
+
+.weak-panel p {
+  font-size: 13px;
+}
+
+.weak-list {
+  margin: 25px 0;
+}
+
+.weak-list a {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-top: 19px;
+  gap: 12px;
+}
+
+.weak-list strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.recommended {
+  padding: 30px 8px;
+}
+
+.recommended>a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.recommended h3 {
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
+.recommended .muted {
+  font-size: 12px;
+}
+
+.progress-insights {
+  display: grid;
+  gap: 24px;
+  margin-top: 38px;
+}
+
+.progress-insight-card {
+  min-width: 0;
+  padding: 28px;
+  border: 1px solid #e7e0d8;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 13px 30px rgba(61,47,36,.065);
+}
+
+.progress-insight-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee8e1;
+}
+
+.progress-insight-heading .eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: #965130;
+}
+
+.progress-insight-heading h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 27px;
+  font-weight: 400;
+  letter-spacing: -.45px;
+}
+
+.progress-insight-heading>span {
+  color: #8b827a;
+  font-family: var(--font-mono);
+  font-size: 9px;
+}
+
+.problem-card-list {
+  display: grid;
+}
+
+.problem-card-row {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 100px 108px;
+  align-items: center;
+  gap: 22px;
+  min-height: 118px;
+  padding: 19px 2px;
+  border-bottom: 1px solid #eee8e1;
+}
+
+.problem-card-row:last-child {
+  border-bottom: 0;
+}
+
+.problem-card-copy {
+  min-width: 0;
+}
+
+.problem-card-copy>span {
+  display: block;
+  margin-bottom: 6px;
+  color: #9b5b3c;
+  font-size: 9px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: .25px;
+}
+
+.problem-card-copy h3 {
+  margin: 0 0 7px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.problem-card-copy p {
+  margin: 0;
+  color: #827970;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.problem-card-progress {
+  display: grid;
+  gap: 6px;
+  padding-left: 18px;
+  border-left: 1px solid #ece5de;
+}
+
+.problem-card-progress span {
+  color: #8a8179;
+  font-size: 9px;
+}
+
+.problem-card-progress strong {
+  color: #ad572f;
+  font-family: var(--font-mono);
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.problem-card-repeat {
+  width: 108px;
+  min-height: 38px;
+}
+
+.progress-insight-empty {
+  margin: 0;
+  padding: 34px 2px 12px;
+  color: #817870;
+  font-size: 12px;
+}
+
+.knowledge-dynamics-heading {
+  align-items: center;
+}
+
+.knowledge-dynamics-heading label {
+  width: min(270px,100%);
+  display: grid;
+  gap: 6px;
+}
+
+.knowledge-dynamics-heading label>span {
+  color: #817870;
+  font-size: 9px;
+}
+
+.knowledge-dynamics-heading select {
+  width: 100%;
+  height: 42px;
+  padding: 0 38px 0 13px;
+  border: 1px solid #ded6ce;
+  border-radius: 10px;
+  appearance: none;
+  background-color: #faf8f5;
+  background-image: linear-gradient(45deg,transparent 50%,#8b5d45 50%),linear-gradient(135deg,#8b5d45 50%,transparent 50%);
+  background-position: calc(100% - 17px) 18px,calc(100% - 12px) 18px;
+  background-repeat: no-repeat;
+  background-size: 5px 5px,5px 5px;
+  color: #332f2b;
+  font-size: 12px;
+}
+
+.knowledge-dynamics-heading select:focus-visible {
+  border-color: #c9764d;
+  outline: 3px solid rgba(201,118,77,.14);
+}
+
+.knowledge-chart-wrap {
+  width: 100%;
+  max-width: 100%;
+  padding-top: 24px;
+  overflow-x: auto;
+}
+
+.knowledge-line-chart {
+  width: 100%;
+  min-width: 560px;
+  display: block;
+}
+
+.knowledge-grid-line {
+  stroke: #e8e1d9;
+  stroke-width: 1;
+}
+
+.knowledge-axis-label,
+.knowledge-date-label,
+.knowledge-point-value {
+  fill: #8b827a;
+  font-family: var(--font-mono);
+  font-size: 9px;
+}
+
+.knowledge-line {
+  fill: none;
+  stroke: #c66436;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 5px 6px rgba(173,82,40,.16));
+}
+
+.knowledge-point {
+  fill: #fff;
+  stroke: #c66436;
+  stroke-width: 4;
+}
+
+.knowledge-point-value {
+  fill: #9e4b27;
+  font-weight: 600;
+}
+
+/* Адаптивные стили для экранов max-width:960px. */
+
+@media (max-width:960px) {
+  .progress-layout {
+    grid-template-columns: minmax(0,1fr) 280px;
+    gap: 24px;
+  }
+}
+
+/* Адаптивные стили для экранов max-width:700px. */
+
+@media (max-width:700px) {
+  .progress-layout {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .progress-aside {
+    display: grid;
+    gap: 15px;
+  }
+
+  .recommended {
+    padding: 15px 4px;
+  }
+
+  .course-select {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .course-select select {
+    width: 100%;
+  }
+
+  .progress-insight-card {
+    padding: 22px 18px;
+  }
+
+  .progress-insight-heading,
+  .knowledge-dynamics-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .knowledge-dynamics-heading label {
+    width: 100%;
+  }
+
+  .problem-card-row {
+    grid-template-columns: minmax(0,1fr) auto;
+    gap: 14px;
+  }
+
+  .problem-card-copy {
+    grid-column: 1 / -1;
+  }
+
+  .problem-card-progress {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+.weak-list strong {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.course-select {
+  position: relative;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.course-select>span {
+  flex: 0 0 auto;
+}
+
+.course-dropdown {
+  position: relative;
+  width: min(330px,100%);
+}
+
+.course-dropdown-trigger {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 0 16px;
+  border: 1px solid #ded7ce;
+  border-radius: 12px;
+  background: #fff;
+  color: #312e2a;
+  text-align: left;
+  box-shadow: 0 5px 14px rgba(62,47,36,.07);
+  transition: border-color .18s ease,box-shadow .18s ease,background-color .18s ease;
+}
+
+.course-dropdown-trigger:hover {
+  border-color: #cbbcaf;
+  background: #fffdfb;
+}
+
+.course-dropdown.open .course-dropdown-trigger {
+  border-color: #bf6840;
+  box-shadow: 0 0 0 3px rgba(184,94,50,.13),0 7px 18px rgba(62,47,36,.09);
+}
+
+.course-dropdown-trigger:focus-visible {
+  outline: 3px solid rgba(184,94,50,.2);
+  outline-offset: 2px;
+}
+
+.course-dropdown-chevron {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border-right: 2px solid #705f53;
+  border-bottom: 2px solid #705f53;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform .28s cubic-bezier(.22,1,.36,1);
+}
+
+.course-dropdown.open .course-dropdown-chevron {
+  transform: translateY(2px) rotate(225deg);
+}
+
+.course-dropdown-menu {
+  position: absolute;
+  inset: calc(100% + 8px) 0 auto;
+  z-index: 20;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border: 1px solid #e4ddd5;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 38px rgba(55,42,32,.14),0 4px 12px rgba(55,42,32,.08);
+  transform-origin: top;
+  animation: course-dropdown-in .2s cubic-bezier(.22,1,.36,1);
+}
+
+.course-dropdown-menu li+li {
+  margin-top: 2px;
+}
+
+.course-dropdown-menu button {
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 11px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #403b36;
+  text-align: left;
+  font-size: 13px;
+  transition: color .15s ease,background-color .15s ease;
+}
+
+.course-dropdown-menu button:hover,
+.course-dropdown-menu button:focus-visible {
+  outline: 0;
+  background: #f5f0ea;
+  color: #924823;
+}
+
+.course-dropdown-menu button.selected {
+  background: #f7ebe2;
+  color: #a44f2a;
+  font-weight: 600;
+}
+
+.course-dropdown-check {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  border-radius: 50%;
+  background: #b85e32;
+  color: #fff;
+  font-size: 11px;
+}
+
+@keyframes course-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px) scale(.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Адаптивные стили для экранов max-width:700px. */
+
+@media (max-width:700px) {
+  .course-select {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .course-dropdown {
+    width: 100%;
+  }
+
+  .course-dropdown-trigger {
+    height: 46px;
+  }
+}
+
+/* Уменьшение движения по настройке операционной системы. */
+
+@media (prefers-reduced-motion:reduce) {
+  .course-dropdown-chevron {
+    transition: none;
+  }
+
+  .course-dropdown-menu {
+    animation: none;
+  }
+}

@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { courses } from '../data';
 import { COURSE_POPULARITY, SIDEBAR_FILTERS } from '../constants';
 
-export function PopularCoursesSidebar() {
+export function PopularCoursesSidebar({ onCourseNavigate }) {
+  const location = useLocation();
   const [filterId, setFilterId] = useState('popular');
   const [filterOpen, setFilterOpen] = useState(false);
   const filterRoot = useRef(null);
@@ -33,6 +34,18 @@ export function PopularCoursesSidebar() {
     requestAnimationFrame(() => filterRoot.current?.querySelector('.popular-filter-trigger')?.focus());
   }
 
+  function markCourseTransition(event, courseId) {
+    const modifiedClick = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+    const targetPath = `/courses/${courseId}`;
+    if (modifiedClick || location.pathname === targetPath) return;
+
+    const currentCourseId = location.pathname.match(/^\/courses\/([^/]+)$/)?.[1];
+    const currentIndex = visibleCourses.findIndex(course => course.id === currentCourseId);
+    const targetIndex = visibleCourses.findIndex(course => course.id === courseId);
+    const direction = currentIndex >= 0 && targetIndex < currentIndex ? 'up' : 'down';
+    onCourseNavigate?.(direction);
+  }
+
   return (
     <aside className="popular-sidebar" aria-labelledby="popular-courses-title">
       <div className="popular-sidebar-heading">
@@ -41,7 +54,12 @@ export function PopularCoursesSidebar() {
       </div>
       <nav aria-label={activeFilter.label}>
         {visibleCourses.map((course, index) => (
-          <Link className="popular-course-card" to={`/courses/${course.id}`} key={course.id}>
+          <NavLink
+            className={({ isActive }) => `popular-course-card${isActive ? ' active' : ''}`}
+            to={`/courses/${course.id}`}
+            key={course.id}
+            onClick={event => markCourseTransition(event, course.id)}
+          >
             <span className="popular-course-rank" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
             <span
               className="popular-course-thumb"
@@ -54,7 +72,7 @@ export function PopularCoursesSidebar() {
               <small>{COURSE_POPULARITY[course.id]}</small>
             </span>
             <span className="popular-course-arrow" aria-hidden="true">→</span>
-          </Link>
+          </NavLink>
         ))}
       </nav>
       <div className={`popular-filter ${filterOpen ? 'open' : ''}`} ref={filterRoot}>

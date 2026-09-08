@@ -165,7 +165,7 @@ export function AuthPage({ user, onAuthenticate }) {
           <button type="button" className="button secondary auth-test-login" onClick={testLogin}>
             Тестовый вход <span aria-hidden="true">→</span>
           </button>
-          <p className="auth-caption">Демо-режим: вход и профиль сбрасываются после обновления.</p>
+          <p className="auth-caption">Сессия и настройки сохраняются в этом браузере.</p>
         </section>
       </div>
     </main>

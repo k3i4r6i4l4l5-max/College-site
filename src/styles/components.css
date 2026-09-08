@@ -1,0 +1,214 @@
+/*
+ * Общие компоненты
+ * Кнопки, индикаторы прогресса, служебные подписи и общие состояния.
+ */
+
+.eyebrow {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .3px;
+}
+
+.page-heading>.eyebrow {
+  display: block;
+  margin-bottom: 18px;
+}
+
+.count {
+  display: inline-grid;
+  place-items: center;
+  background: #eeebe5;
+  font-size: 12px;
+  width: 23px;
+  height: 23px;
+  border-radius: 5px;
+  margin-left: 8px;
+  color: #716d66;
+  vertical-align: middle;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.progress-label strong {
+  color: #53504a;
+  font-weight: 500;
+}
+
+.progress-track {
+  height: 5px;
+  border-radius: 10px;
+  background: #eeebe5;
+  overflow: hidden;
+}
+
+.progress-track span {
+  height: 100%;
+  display: block;
+  background: #cf7a4f;
+  border-radius: 10px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-height: 43px;
+  padding: 11px 19px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  transition: background .15s,border-color .15s;
+}
+
+.button.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.button.primary:hover {
+  background: #a44d27;
+}
+
+.button.secondary {
+  background: #fff;
+  border-color: var(--border);
+  color: #38352f;
+}
+
+.button.secondary:hover {
+  background: #f4f1ec;
+  border-color: #cfc6b8;
+}
+
+.button.neutral {
+  background: #f0ece5;
+  color: #49443c;
+}
+
+.button.neutral:hover {
+  background: #e5dfd5;
+}
+
+.text-link {
+  font-size: 13px;
+}
+
+.text-link:hover {
+  color: var(--accent);
+}
+
+.quiet-note {
+  text-align: center;
+  font-size: 12px;
+  color: #8b857c;
+  margin: 35px 0 0;
+}
+
+.tag {
+  font-size: 10px;
+  color: #a2512c;
+  background: #f7eade;
+  padding: 4px 7px;
+  border-radius: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.text-button {
+  display: block;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-size: 13px;
+  padding: 14px;
+  margin: 8px auto 0;
+}
+
+.empty {
+  text-align: center;
+  padding: 70px 0;
+}
+
+/* Адаптивные стили для экранов max-width:960px. */
+
+@media (max-width:960px) {
+  .tag {
+    display: table;
+    margin: 6px 0 0;
+  }
+}
+
+/* Адаптивные стили для экранов max-width:700px. */
+
+@media (max-width:700px) {
+  .quiet-note {
+    line-height: 1.6;
+  }
+}
+
+.course-progress-panel .progress-label {
+  margin-bottom: 10px;
+}
+
+.progress-track span {
+  transition: width .45s ease;
+}
+
+/* Уменьшение движения по настройке операционной системы. */
+
+@media (prefers-reduced-motion:reduce) {
+  .progress-track span {
+    transition: none !important;
+  }
+}
+
+.progress-label strong {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.button {
+  min-height: 42px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  transition: color .16s ease,background-color .16s ease,border-color .16s ease,transform .16s ease;
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.drawer-close {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: #fff;
+  color: #514b45;
+  font-size: 24px;
+  line-height: 1;
+  transition: background-color .18s ease,transform .18s ease;
+}
+
+.drawer-close:hover {
+  background: #f1ede7;
+  transform: rotate(4deg);
+}
+
+.course-knowledge>.eyebrow {
+  display: block;
+  margin-bottom: 12px;
+}

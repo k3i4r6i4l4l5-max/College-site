@@ -4,8 +4,10 @@ import { average, courses, topicById } from '../data';
 import { CourseDropdown } from '../components/CourseDropdown';
 import { ProgressBar } from '../components/ProgressBar';
 import { TopicCard } from '../components/TopicCard';
+import { ProblemCards } from '../components/ProblemCards';
+import { KnowledgeDynamics } from '../components/KnowledgeDynamics';
 
-export function ProgressPage({ progress }) {
+export function ProgressPage({ activity, progress }) {
   const [courseId, setCourseId] = useState('java');
   const course = courses.find(item => item.id === courseId);
   const selectedTopics = course.topics.map(topicById);
@@ -73,6 +75,10 @@ export function ProgressPage({ progress }) {
             ))}
           </section>
         </aside>
+      </div>
+      <div className="progress-insights">
+        <ProblemCards activity={activity} course={course} progress={progress} />
+        <KnowledgeDynamics activity={activity} course={course} />
       </div>
     </>
   );

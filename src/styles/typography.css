@@ -1,0 +1,58 @@
+/*
+ * Типографические акценты.
+ * Гарнитуры распределены по смысловым ролям, чтобы ключевые места отличались
+ * от основного интерфейсного текста без изменения размеров блоков.
+ */
+
+.eyebrow,
+.tag,
+.popular-course-copy small,
+.profile-course-copy>small,
+.problem-card-copy>span,
+.community-course-copy>span {
+  font-family: var(--font-label);
+  font-weight: 600;
+  letter-spacing: .035em;
+}
+
+.section-title h2,
+.profile-section-heading h2,
+.progress-insight-heading h2,
+.community-section-heading h2,
+.popular-sidebar-heading h2,
+.preparation-plan-heading h2,
+.activity-chart-card h3,
+.settings-card-heading h3 {
+  font-family: var(--font-editorial);
+}
+
+.profile-person h2,
+.course-card-title,
+.popular-course-copy strong,
+.profile-course-copy>strong,
+.problem-card-copy h3,
+.profile-last-card h3 {
+  font-family: var(--font-emphasis);
+  font-stretch: semi-condensed;
+}
+
+.large-value,
+.topic-count,
+.profile-stats strong,
+.activity-chart-card>header>strong,
+.preparation-plan-metrics strong,
+.course-knowledge-grid strong,
+.course-card-knowledge strong,
+.profile-today-stats strong {
+  font-family: var(--font-emphasis);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-label,
+.personal-stats,
+.activity-date,
+.profile-course-progress-label,
+.preparation-plan-day>header {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}

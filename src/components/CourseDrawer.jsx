@@ -69,8 +69,12 @@ export function CourseDrawer({ course, progress, open, onClose }) {
           ))}
         </div>
         <div className="drawer-actions">
-          <Link className="button primary" to={`/courses/${course.id}`}>Открыть курс <span aria-hidden="true">→</span></Link>
-          <Link className="text-link" to={`/training?course=${course.id}`}>Начать тренировку</Link>
+          <Link className="button primary" to={`/courses/${course.id}`} onClick={onClose}>
+            Открыть курс <span aria-hidden="true">→</span>
+          </Link>
+          <Link className="text-link" to={`/training?course=${course.id}`} onClick={onClose}>
+            Начать тренировку
+          </Link>
         </div>
       </aside>
     </div>

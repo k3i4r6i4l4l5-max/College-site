@@ -1,0 +1,230 @@
+/*
+ * Постоянный сайдбар плана подготовки.
+ * Форма настройки и сводка активного персонального плана.
+ */
+
+.preparation-plan-sidebar {
+  position: sticky;
+  top: 43px;
+  align-self: start;
+  height: calc(100dvh - 86px);
+  margin-top: -39px;
+  margin-bottom: 43px;
+  padding: 22px;
+  overflow-y: auto;
+  border: 1px solid #e7e0d8;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: -12px 14px 34px rgba(61,47,36,.075);
+  display: flex;
+  flex-direction: column;
+}
+
+.preparation-plan-heading {
+  padding: 2px 2px 20px;
+  border-bottom: 1px solid #eee9e3;
+}
+
+.preparation-plan-heading .eyebrow {
+  display: block;
+  margin-bottom: 6px;
+  color: #916149;
+}
+
+.preparation-plan-heading h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -.65px;
+}
+
+.preparation-plan-heading p {
+  max-width: 280px;
+  margin: 14px 0 0;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.preparation-plan-notice {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid #eadbcf;
+  border-radius: 14px;
+  background: #f8f2ed;
+}
+
+.preparation-plan-notice .eyebrow {
+  display: block;
+  margin-bottom: 9px;
+  color: #985332;
+}
+
+.preparation-plan-notice p {
+  margin: 0;
+  color: #544b44;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.preparation-plan-form {
+  display: grid;
+  gap: 18px;
+  padding-top: 20px;
+}
+
+.preparation-plan-form h3,
+.preparation-plan-course h3 {
+  margin: 7px 0 6px;
+  color: #2d2926;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.preparation-plan-form p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.preparation-plan-form label {
+  display: grid;
+  gap: 8px;
+  color: #514a44;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.preparation-plan-form select {
+  width: 100%;
+  height: 44px;
+  padding: 0 38px 0 13px;
+  border: 1px solid #ddd5cd;
+  border-radius: 11px;
+  background: #fff;
+  color: #332f2b;
+  font-size: 13px;
+}
+
+.preparation-plan-form select:focus-visible {
+  border-color: #c9764d;
+}
+
+.preparation-plan-form>.button,
+.preparation-plan-summary>.button {
+  width: 100%;
+}
+
+.preparation-plan-summary {
+  display: grid;
+  gap: 18px;
+  padding-top: 20px;
+}
+
+.preparation-plan-course {
+  padding: 0 2px;
+}
+
+.preparation-plan-metrics {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  border: 1px solid #e6dfd7;
+  border-radius: 14px;
+  background: #faf8f5;
+}
+
+.preparation-plan-metrics>div {
+  display: grid;
+  gap: 4px;
+  padding: 16px 10px;
+  text-align: center;
+}
+
+.preparation-plan-metrics>div+div {
+  border-left: 1px solid #e6dfd7;
+}
+
+.preparation-plan-metrics strong {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.preparation-plan-metrics span {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.preparation-plan-days {
+  display: grid;
+  gap: 12px;
+}
+
+.preparation-plan-day {
+  padding: 18px;
+  border: 1px solid #e6dfd7;
+  border-radius: 14px;
+  background: #faf8f5;
+}
+
+.preparation-plan-day.is-today {
+  border-color: #e7d8cc;
+  background: #f7efe9;
+}
+
+.preparation-plan-day>header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.preparation-plan-day>header span,
+.preparation-plan-day>header strong {
+  color: #965130;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+}
+
+.preparation-plan-topic-list {
+  display: grid;
+}
+
+.preparation-plan-topic-list>div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 43px;
+  border-top: 1px solid rgba(154,113,87,.18);
+}
+
+.preparation-plan-topic-list span {
+  color: #38322e;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.preparation-plan-topic-list small {
+  color: #8d5d45;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.preparation-plan-day>p {
+  margin: 12px 0 0;
+  color: #765e50;
+  font-size: 10px;
+}
+
+@media (max-width:1280px) {
+  .preparation-plan-sidebar {
+    display: none;
+  }
+}

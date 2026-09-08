@@ -23,9 +23,16 @@ function createDeck(params, progress) {
     selected = topics.filter(topic => course?.topics.includes(topic.id));
   }
 
-  return selected.flatMap(topic => (
-    topic.cards.map(([question, answer]) => ({ topic, question, answer }))
+  const deck = selected.flatMap(topic => (
+    topic.cards.map(([question, answer], cardIndex) => ({ topic, question, answer, cardIndex }))
   ));
+
+  if (params.has('topic') && params.has('card')) {
+    const requestedCard = Number(params.get('card'));
+    return deck.filter(card => card.cardIndex === requestedCard);
+  }
+
+  return deck;
 }
 
 export function TrainingPage({ progress, onRate }) {
@@ -38,7 +45,7 @@ export function TrainingPage({ progress, onRate }) {
   const back = course ? `/courses/${course.id}` : '/progress';
 
   function rate(value) {
-    onRate(deck[index].topic.id, value);
+    onRate(deck[index].topic.id, value, deck[index].cardIndex);
     setResults(current => ({ ...current, [value]: current[value] + 1 }));
     setRevealed(false);
     setIndex(current => current + 1);

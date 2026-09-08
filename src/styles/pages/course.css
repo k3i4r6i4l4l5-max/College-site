@@ -1,0 +1,450 @@
+/*
+ * Страница курса
+ * Сводка курса, список тем и выезжающая панель с данными курса.
+ */
+
+.breadcrumb {
+  display: flex;
+  gap: 11px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 33px;
+}
+
+.breadcrumb a:hover {
+  color: var(--accent);
+}
+
+.course-summary {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  background: #f1eee7;
+  padding: 26px 30px;
+  border-radius: 9px;
+  margin-bottom: 42px;
+}
+
+.summary-bar {
+  flex: 1;
+  max-width: 430px;
+}
+
+.summary-bar p {
+  font-size: 12px;
+  margin: 12px 0 0;
+}
+
+.course-summary>.button {
+  margin-left: auto;
+}
+
+.topic-list {
+  border-top: 1px solid var(--border);
+}
+
+.topic-row {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 24px 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.topic-row:hover h3 {
+  color: var(--accent);
+}
+
+.topic-row h3 {
+  margin-bottom: 6px;
+}
+
+.topic-row p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.topic-progress {
+  width: 130px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.topic-progress strong {
+  display: block;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.row-arrow {
+  color: #9b958a;
+  margin-left: 10px;
+}
+
+/* Адаптивные стили для экранов max-width:700px. */
+
+@media (max-width:700px) {
+  .course-summary {
+    flex-wrap: wrap;
+    padding: 24px;
+    gap: 20px;
+  }
+
+  .summary-bar {
+    min-width: 130px;
+  }
+
+  .course-summary>.button {
+    width: 100%;
+  }
+
+  .topic-row {
+    gap: 12px;
+  }
+
+  .topic-progress {
+    width: 70px;
+  }
+
+  .row-arrow {
+    margin-left: 0;
+  }
+
+  .topic-row p {
+    font-size: 12px;
+  }
+
+  .topic-row h3 {
+    font-size: 15px;
+  }
+
+  .breadcrumb {
+    line-height: 1.6;
+  }
+}
+
+.topic-progress strong {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.drawer-topic-list {
+  display: grid;
+  gap: 9px;
+}
+
+.drawer-topic {
+  display: block;
+  padding: 15px;
+  border: 1px solid #e4ded6;
+  border-radius: 11px;
+  background: #fff;
+  transition: border-color .18s ease,transform .18s ease;
+}
+
+.drawer-topic:hover {
+  border-color: #cabdaf;
+  transform: translateX(2px);
+}
+
+.drawer-topic:active {
+  border-color: #c56a40;
+  box-shadow: 0 0 0 4px rgba(204,99,52,.2);
+}
+
+.drawer-topic-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.drawer-topic-heading strong {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.drawer-topic-heading span {
+  color: #6e675f;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.drawer-topic-heading span.weak {
+  color: #a64f29;
+}
+
+.drawer-topic p {
+  margin: 5px 0 11px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.drawer-topic-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.drawer-topic-progress .progress-track {
+  flex: 1;
+  height: 4px;
+}
+
+.drawer-topic-progress>strong {
+  min-width: 30px;
+  color: #5a544d;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-align: right;
+}
+
+/* Уменьшение движения по настройке операционной системы. */
+
+@media (prefers-reduced-motion:reduce) {
+  .drawer-topic {
+    transition: none;
+  }
+}
+
+.course-info-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #a6532e;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.course-info-open:hover {
+  color: #7f3d20;
+}
+
+.course-heading-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.course-plan-button {
+  min-height: 38px;
+  margin-top: 20px;
+  padding-inline: 18px;
+}
+
+.course-info-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear .4s;
+}
+
+.course-info-layer.open {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.course-info-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: rgba(42,35,29,.28);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+
+.course-info-layer.open .course-info-backdrop {
+  opacity: 1;
+}
+
+.course-info-drawer {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: min(480px,calc(100vw - 24px));
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  overflow-y: auto;
+  border-left: 1px solid #ded8d0;
+  background: #faf9f6;
+  box-shadow: -18px 0 50px rgba(58,47,38,.14);
+  transform: translateX(102%);
+  transition: transform .4s cubic-bezier(.22,1,.36,1);
+}
+
+.course-info-layer.open .course-info-drawer {
+  transform: translateX(0);
+}
+
+.course-info-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e5ded6;
+}
+
+.course-info-header .eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: #956047;
+}
+
+.course-info-header h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 29px;
+  font-weight: 400;
+  line-height: 1.18;
+  letter-spacing: -.55px;
+}
+
+.course-info-total {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  margin-top: 22px;
+  padding: 21px 22px;
+  border: 1px solid #e5ddd5;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 19px rgba(61,46,34,.07);
+}
+
+.course-info-total>span {
+  grid-column: 1;
+  color: #837a72;
+  font-size: 11px;
+}
+
+.course-info-total strong {
+  grid-column: 2;
+  grid-row: 1/3;
+  color: #292622;
+  font-family: var(--font-mono);
+  font-size: 38px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.course-info-total small {
+  grid-column: 1;
+  margin-top: 6px;
+  color: #aa5b36;
+  font-size: 12px;
+}
+
+.course-info-topics {
+  margin-top: 30px;
+}
+
+.course-info-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.course-info-section-title h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.course-info-section-title>span {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 24px;
+  border-radius: 999px;
+  background: #eee8e1;
+  color: #827970;
+  font-family: var(--font-mono);
+  font-size: 9px;
+}
+
+.course-info-topic-list {
+  border-top: 1px solid #e7e0d8;
+}
+
+.course-info-topic-list>a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px 3px;
+  border-bottom: 1px solid #e7e0d8;
+  transition: padding .17s ease,color .17s ease;
+}
+
+.course-info-topic-list>a:hover {
+  padding-left: 7px;
+  color: #a6532e;
+}
+
+.course-info-topic-list>a>span {
+  display: grid;
+  gap: 5px;
+}
+
+.course-info-topic-list strong {
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.course-info-topic-list small {
+  color: #8c847c;
+  font-size: 10px;
+}
+
+.course-info-topic-list b {
+  color: #a6532e;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.course-info-action {
+  width: 100%;
+  margin-top: 28px;
+}
+
+/* Адаптивные стили для экранов max-width:560px. */
+
+@media (max-width:560px) {
+  .course-info-drawer {
+    width: 100%;
+    padding: 24px 20px 28px;
+    border-left: 0;
+  }
+
+  .course-info-header h2 {
+    font-size: 26px;
+  }
+}
+
+/* Уменьшение движения по настройке операционной системы. */
+
+@media (prefers-reduced-motion:reduce) {
+  .course-info-layer,
+  .course-info-backdrop,
+  .course-info-drawer,
+  .course-info-topic-list>a {
+    transition: none;
+  }
+}

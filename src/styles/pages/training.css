@@ -1,0 +1,158 @@
+/*
+ * Страница тренировки
+ * Карточка вопроса, ответ, оценка знания и экран завершения.
+ */
+
+.training-width {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.training-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 35px;
+}
+
+.training-progress {
+  margin-bottom: 24px;
+}
+
+.study-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 42px;
+  box-shadow: 0 3px 12px #28272503;
+}
+
+.study-card h1 {
+  font-family: Arial,sans-serif;
+  letter-spacing: -.7px;
+  font-size: 29px;
+  line-height: 1.45;
+  margin: 24px 0 30px;
+}
+
+.reveal {
+  padding-top: 30px;
+  text-align: center;
+}
+
+.reveal p {
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.answer {
+  border-top: 1px solid var(--border);
+  padding-top: 27px;
+}
+
+.answer p {
+  color: #4f4b44;
+  font-size: 16px;
+  margin-top: 14px;
+  line-height: 1.8;
+}
+
+.rating {
+  margin-top: 33px;
+}
+
+.rating>p {
+  text-align: center;
+  font-size: 12px;
+}
+
+.rating-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.rating-buttons>.button {
+  flex: 1;
+}
+
+.completed {
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 48px 30px;
+  background: white;
+}
+
+.completed h1 {
+  font-size: 36px;
+  margin-top: 24px;
+}
+
+.completion-mark {
+  background: #f4eadf;
+  color: var(--accent);
+  display: inline-grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 24px;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  margin: 32px 0;
+}
+
+.result-grid strong {
+  display: block;
+  font-size: 32px;
+  font-weight: 400;
+}
+
+.result-grid span {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* Адаптивные стили для экранов max-width:700px. */
+
+@media (max-width:700px) {
+  .training-top>.muted {
+    display: none;
+  }
+
+  .study-card {
+    padding: 28px 23px;
+  }
+
+  .study-card h1 {
+    font-size: 25px;
+  }
+
+  .rating-buttons {
+    gap: 8px;
+  }
+
+  .rating-buttons .button {
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+
+  .completed h1 {
+    font-size: 30px;
+  }
+
+  .completed {
+    padding: 35px 20px;
+  }
+}
+
+.result-grid strong,
+.training-progress {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}

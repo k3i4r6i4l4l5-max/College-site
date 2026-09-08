@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { average, courses, topicById } from '../data';
 import { Breadcrumb } from '../components/Breadcrumb';
+import { CourseInfoDrawer } from '../components/CourseInfoDrawer';
 import { ProgressBar } from '../components/ProgressBar';
 import { TopicCard } from '../components/TopicCard';
 import { NotFoundPage } from './NotFoundPage';
 
-export function CoursePage({ progress }) {
+export function CoursePage({ progress, onPlanCourse }) {
   const { id } = useParams();
+  const [infoOpen, setInfoOpen] = useState(false);
   const course = courses.find(item => item.id === id);
+
+  useEffect(() => setInfoOpen(false), [id]);
+
   if (!course) return <NotFoundPage />;
 
   const value = average(course.topics.map(topicId => progress[topicId]));
@@ -21,6 +26,14 @@ export function CoursePage({ progress }) {
         <span className="eyebrow">{course.category}</span>
         <h1>{course.title}</h1>
         <p>{course.description}</p>
+        <div className="course-heading-actions">
+          <button type="button" className="course-info-open" onClick={() => setInfoOpen(true)}>
+            Информация о курсе <span aria-hidden="true">→</span>
+          </button>
+          <button type="button" className="button secondary course-plan-button" onClick={() => onPlanCourse(course.id)}>
+            Составить план
+          </button>
+        </div>
       </div>
       <div className="course-summary">
         <div>
@@ -44,6 +57,12 @@ export function CoursePage({ progress }) {
           <TopicCard key={topicId} topic={topicById(topicId)} value={progress[topicId]} />
         ))}
       </div>
+      <CourseInfoDrawer
+        course={course}
+        progress={progress}
+        open={infoOpen}
+        onClose={() => setInfoOpen(false)}
+      />
     </>
   );
 }

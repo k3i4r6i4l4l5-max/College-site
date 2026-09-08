@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { average, courses, topics } from '../data';
 import { Breadcrumb } from '../components/Breadcrumb';
+import { ActivityCharts } from '../components/ActivityCharts';
+import { ProfileCourses } from '../components/ProfileCourses';
 
-export function ProfilePage({ progress, user, onUpdate }) {
+export function ProfilePage({ activity, progress, user, onUpdate }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(user);
   const [message, setMessage] = useState('');
@@ -73,15 +75,18 @@ export function ProfilePage({ progress, user, onUpdate }) {
             </div>
           )}
           {!editing && (
-            <button
-              className="button secondary profile-edit"
-              onClick={() => {
-                setEditing(true);
-                setMessage('');
-              }}
-            >
-              Редактировать профиль
-            </button>
+            <div className="profile-actions">
+              <button
+                className="button secondary profile-edit"
+                onClick={() => {
+                  setEditing(true);
+                  setMessage('');
+                }}
+              >
+                Редактировать профиль
+              </button>
+              <Link className="button secondary" to="/settings">Настройки</Link>
+            </div>
           )}
         </div>
         {message && <p className="profile-message" role="status">{message}</p>}
@@ -91,32 +96,8 @@ export function ProfilePage({ progress, user, onUpdate }) {
           <div><span>Общий прогресс</span><strong>{overall}%</strong><small>по всем темам</small></div>
         </div>
       </section>
-      <section className="profile-activity">
-        <div>
-          <span className="eyebrow">Последняя активность</span>
-          <h2>Java Junior Interview</h2>
-          <p>Тема Multithreading · {progress.threads}% освоено</p>
-        </div>
-        <div className="activity-date">
-          <span>Сегодня</span>
-          <small>Короткая тренировка</small>
-        </div>
-        <Link className="button primary" to="/training?topic=threads">
-          Продолжить <span aria-hidden="true">→</span>
-        </Link>
-      </section>
-      <section className="profile-settings" id="settings">
-        <div>
-          <h2>Настройки</h2>
-          <p>Здесь можно будет управлять уведомлениями и синхронизацией данных.</p>
-        </div>
-        <button
-          className="button secondary"
-          onClick={() => setMessage('Настройки пока работают в демонстрационном режиме.')}
-        >
-          Настроить
-        </button>
-      </section>
+      <ProfileCourses progress={progress} />
+      <ActivityCharts activity={activity} />
     </div>
   );
 }
