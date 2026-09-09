@@ -3,9 +3,10 @@ import React, { useEffect, useRef, useState } from 'react';
 const FADE_DURATION = 260;
 const COURSE_SWIPE_DURATION = 520;
 
-// Создаёт стабильный ключ страницы с учётом пути и query-параметров.
+// Query-параметры меняют состояние текущей страницы (например, поиск),
+// поэтому переход запускается только при изменении самого пути.
 function locationKey(location) {
-  return `${location.pathname}${location.search}`;
+  return location.pathname;
 }
 
 /**
@@ -25,7 +26,11 @@ export function PageTransition({ location, transitionIntent, children }) {
   // Запускает новую анимацию при каждом изменении адреса, включая быстрые переходы.
   useEffect(() => {
     const nextKey = locationKey(location);
-    if (nextKey === displayedKey.current) return undefined;
+    if (nextKey === displayedKey.current) {
+      displayedLocationRef.current = location;
+      setDisplayedLocation(location);
+      return undefined;
+    }
 
     const requestedTransition = transitionIntent?.current || { style: 'fade', direction: 'down' };
     const requestedStyle = typeof requestedTransition === 'string'
@@ -74,9 +79,10 @@ export function PageTransition({ location, transitionIntent, children }) {
     }, duration);
 
     return () => window.clearTimeout(timeout);
-  }, [location.pathname, location.search, transitionIntent]);
+  }, [location.pathname, location.search, location.hash, transitionIntent]);
 
   const transitionActive = phase !== 'visible' && outgoingLocation;
+  const visibleLocation = locationKey(location) === displayedKey.current ? location : displayedLocation;
 
   return (
     <div
@@ -103,7 +109,7 @@ export function PageTransition({ location, transitionIntent, children }) {
             {children(outgoingLocation)}
           </div>
         </>
-      ) : children(displayedLocation)}
+      ) : children(visibleLocation)}
     </div>
   );
 }

@@ -5,7 +5,10 @@ module.exports = {
   async run(page) {
     await openClean(page);
     await login(page);
-    await page.goto('http://127.0.0.1:5173/?q=вероятностей');
+    const search = page.getByRole('searchbox', { name: 'Поиск' });
+    await search.fill('вероятностей');
+    assert.equal(await search.inputValue(), 'вероятностей');
+    assert.equal(await search.evaluate(element => element === document.activeElement), true);
     await page.getByRole('heading', { name: 'Курсы 1' }).waitFor();
     assert.equal(await page.locator('.course-tile').count(), 1);
     await page.getByRole('button', { name: 'Сбросить' }).click();
