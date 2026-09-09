@@ -1,18 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { courses } from '../data';
+import { useCatalog } from '../context/CatalogContext';
 import { COURSE_POPULARITY, SIDEBAR_FILTERS } from '../constants';
 
-export function PopularCoursesSidebar({ onCourseNavigate }) {
+/** Показывает фильтруемый список популярных курсов в постоянном левом сайдбаре. */
+export function PopularCoursesSidebar({ onCourseNavigate, userCourses = [] }) {
+  const { courses } = useCatalog();
   const location = useLocation();
   const [filterId, setFilterId] = useState('popular');
   const [filterOpen, setFilterOpen] = useState(false);
   const filterRoot = useRef(null);
   const activeFilter = SIDEBAR_FILTERS.find(filter => filter.id === filterId) || SIDEBAR_FILTERS[0];
-  const visibleCourses = activeFilter.courses
+  const filterCourseIds = filterId === 'recent' && userCourses.length
+    ? userCourses.filter(item => item.status === 'active').map(item => item.courseId)
+    : activeFilter.courses;
+  const visibleCourses = filterCourseIds
     .map(id => courses.find(course => course.id === id))
     .filter(Boolean);
 
+  // Закрывает меню фильтров при клике снаружи или нажатии Escape.
   useEffect(() => {
     function closeOutside(event) {
       if (!filterRoot.current?.contains(event.target)) setFilterOpen(false);
@@ -28,12 +34,14 @@ export function PopularCoursesSidebar({ onCourseNavigate }) {
     };
   }, []);
 
+  // Применяет фильтр и возвращает клавиатурный фокус на кнопку dropdown.
   function chooseFilter(id) {
     setFilterId(id);
     setFilterOpen(false);
     requestAnimationFrame(() => filterRoot.current?.querySelector('.popular-filter-trigger')?.focus());
   }
 
+  // Выбирает направление перехода по положению текущего и нового курса в списке.
   function markCourseTransition(event, courseId) {
     const modifiedClick = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
     const targetPath = `/courses/${courseId}`;

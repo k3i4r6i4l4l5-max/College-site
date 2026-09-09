@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { average, topicById } from '../data';
+import { average } from '../utils/numbers';
+import { useCatalog } from '../context/CatalogContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { ProgressBar } from './ProgressBar';
 
+// Возвращает текстовую оценку темы по её проценту знания.
 function knowledgeLabel(value) {
   if (value === 0) return 'Не начато';
   if (value >= 75) return 'Уверенно';
@@ -11,10 +13,14 @@ function knowledgeLabel(value) {
   return 'Стоит повторить';
 }
 
+/** Показывает обзор курса и его тем во выдвижной панели. */
 export function CourseDrawer({ course, progress, open, onClose }) {
+  const { topicById } = useCatalog();
+  // Пока панель открыта, блокирует прокрутку фоновой страницы.
   useBodyScrollLock(open, onClose);
   if (!course) return null;
 
+  // Собирает сводные показатели, которые выводятся в верхней части панели.
   const courseTopics = course.topics.map(topicById);
   const value = average(courseTopics.map(topic => progress[topic.id]));
   const completed = courseTopics.filter(topic => progress[topic.id] >= 70).length;

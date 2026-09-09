@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { courses } from '../data';
+import { useCatalog } from '../context/CatalogContext';
 
+/** Управляет доступным dropdown выбора курса на странице прогресса. */
 export function CourseDropdown({ value, onChange }) {
+  const { courses } = useCatalog();
   const [open, setOpen] = useState(false);
   const root = useRef(null);
   const current = courses.find(course => course.id === value) || courses[0];
 
+  // Закрывает список при клике вне dropdown или нажатии Escape.
   useEffect(() => {
     function closeOutside(event) {
       if (!root.current?.contains(event.target)) setOpen(false);
@@ -21,6 +24,7 @@ export function CourseDropdown({ value, onChange }) {
     };
   }, []);
 
+  // Передаёт выбранный курс родителю, закрывает список и возвращает фокус кнопке.
   function selectCourse(id) {
     onChange(id);
     setOpen(false);

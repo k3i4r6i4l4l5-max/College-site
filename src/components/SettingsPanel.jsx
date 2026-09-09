@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 
+// Унифицированный переключатель логической настройки с ролью switch.
 function Toggle({ checked, label, description, onChange }) {
   return (
     <div className="setting-row">
@@ -22,10 +23,12 @@ function Toggle({ checked, label, description, onChange }) {
   );
 }
 
+/** Управляет настройками интерфейса, данными аккаунта и локальными действиями профиля. */
 export function SettingsPanel({
   settings,
   user,
   onDeleteAccount,
+  onChangePassword,
   onLogoutAll,
   onSettingsChange,
   onUpdate,
@@ -36,27 +39,33 @@ export function SettingsPanel({
   const [passwordMessage, setPasswordMessage] = useState('');
   const [deleteOpen, setDeleteOpen] = useState(false);
 
+  // Синхронизирует редактируемые поля после внешнего обновления пользователя.
   useEffect(() => {
     setAccountDraft({ name: user.name, email: user.email });
   }, [user]);
 
   useBodyScrollLock(deleteOpen, () => setDeleteOpen(false));
 
+  // Обновляет одну настройку, сохраняя остальные значения объекта.
   function updateSetting(key, value) {
     onSettingsChange(current => ({ ...current, [key]: value }));
   }
 
-  function saveAccount(event) {
+  // Проверяет пустые значения и передаёт обновлённые имя и email родителю.
+  async function saveAccount(event) {
     event.preventDefault();
     const nextUser = {
       name: accountDraft.name.trim() || user.name,
       email: accountDraft.email.trim() || user.email,
     };
-    onUpdate(nextUser);
-    setAccountMessage('Данные аккаунта обновлены.');
+    try {
+      await onUpdate(nextUser);
+      setAccountMessage('Данные аккаунта обновлены.');
+    } catch (error) { setAccountMessage(error.message); }
   }
 
-  function changePassword(event) {
+  // Выполняет локальную проверку длины и совпадения нового пароля.
+  async function changePassword(event) {
     event.preventDefault();
     if (passwords.next.length < 6) {
       setPasswordMessage('Новый пароль должен содержать не менее 6 символов.');
@@ -66,8 +75,11 @@ export function SettingsPanel({
       setPasswordMessage('Новые пароли не совпадают.');
       return;
     }
-    setPasswords({ current: '', next: '', confirm: '' });
-    setPasswordMessage('Пароль изменён в демонстрационном профиле.');
+    try {
+      await onChangePassword({ currentPassword: passwords.current, newPassword: passwords.next });
+      setPasswords({ current: '', next: '', confirm: '' });
+      setPasswordMessage('Пароль успешно изменён.');
+    } catch (error) { setPasswordMessage(error.message); }
   }
 
   return (
@@ -77,7 +89,7 @@ export function SettingsPanel({
           <span className="eyebrow">Персонализация</span>
           <h1 id="settings-title">Настройки</h1>
         </div>
-        <p>Настройте интерфейс и данные локального профиля.</p>
+        <p>Настройте интерфейс и данные своего профиля.</p>
       </header>
 
       <div className="settings-grid">

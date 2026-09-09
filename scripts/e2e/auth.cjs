@@ -1,0 +1,2 @@
+const { assert, openClean } = require('./helpers.cjs');
+module.exports = { name: 'авторизация и восстановление сессии', async run(page) { await openClean(page); await page.getByRole('button', { name: /Тестовый вход/ }).click(); await page.getByRole('heading', { name: 'Подготовка', exact: true }).waitFor(); await page.reload(); await page.getByRole('heading', { name: 'Подготовка', exact: true }).waitFor(); assert.match(await page.locator('body').innerText(), /Курсы/); } };

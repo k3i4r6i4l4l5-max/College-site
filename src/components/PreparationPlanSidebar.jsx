@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { courses, topicById } from '../data';
+import { useCatalog } from '../context/CatalogContext';
 import { createPreparationPlan, preparationPlanToday } from '../utils/preparationPlan';
 
+// Подбирает правильную форму слова «карточка» для числового значения.
 function cardWord(value) {
   const lastTwo = value % 100;
   const last = value % 10;
@@ -12,7 +13,8 @@ function cardWord(value) {
   return 'карточек';
 }
 
-function groupTopics(topicIds) {
+// Объединяет повторения одной темы в день и суммирует назначенные карточки.
+function groupTopics(topicIds, topicById) {
   const grouped = new Map();
   topicIds.forEach(topicId => grouped.set(topicId, (grouped.get(topicId) || 0) + 1));
 
@@ -25,14 +27,21 @@ function groupTopics(topicIds) {
   });
 }
 
-export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onCreatePlan, children }) {
+/**
+ * Создаёт план подготовки и показывает ближайшие семь дней активного плана
+ * в постоянном правом сайдбаре.
+ */
+export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onSavePlan, onDeletePlan, children }) {
+  const { courses, topicById } = useCatalog();
   const [days, setDays] = useState(7);
   const [minutes, setMinutes] = useState(30);
+  const [editing, setEditing] = useState(false);
   const courseId = selectedCourseId || plan?.courseId;
   const course = courses.find(item => item.id === courseId);
   const courseHasProgress = course?.topics.some(topicId => progress[topicId] > 0);
   const activePlan = plan?.courseId === courseId ? plan : null;
 
+  // Возвращает исходные параметры формы после выбора курса без активного плана.
   useEffect(() => {
     if (!activePlan) {
       setDays(7);
@@ -40,11 +49,13 @@ export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onCre
     }
   }, [courseId, activePlan]);
 
+  // Определяет текущий день плана по дате его создания.
   const today = useMemo(
     () => activePlan ? preparationPlanToday(activePlan) : null,
     [activePlan],
   );
 
+  // Подготавливает текущий и следующие дни, но ограничивает превью семью днями.
   const upcomingDays = useMemo(() => {
     if (!activePlan || !today) return [];
 
@@ -52,16 +63,31 @@ export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onCre
       .slice(today.dayIndex, today.dayIndex + 7)
       .map(day => ({
         ...day,
-        topics: groupTopics(day.topicIds),
+        topics: groupTopics(day.topicIds, topicById),
       }));
-  }, [activePlan, today]);
+  }, [activePlan, today, topicById]);
 
   const todayTopics = upcomingDays[0]?.topics || [];
 
-  function submitPlan(event) {
+  // Создаёт приоритетный план из выбранного срока, времени и прогресса по темам.
+  async function submitPlan(event) {
     event.preventDefault();
-    onCreatePlan(createPreparationPlan(course, progress, days, minutes));
+    await onSavePlan(createPreparationPlan(course, progress, days, minutes, topicById));
+    setEditing(false);
   }
+
+  async function toggleDayTopic(dayNumber, topicId) {
+    const schedule = activePlan.schedule.map(day => {
+      if (day.day !== dayNumber) return day;
+      const completed = day.completedTopicIds || [];
+      return { ...day, completedTopicIds: completed.includes(topicId) ? completed.filter(id => id !== topicId) : [...completed, topicId] };
+    });
+    await onSavePlan({ ...activePlan, schedule });
+  }
+
+  const totalPlanItems = activePlan?.schedule.reduce((sum, day) => sum + day.topicIds.length, 0) || 0;
+  const completedPlanItems = activePlan?.schedule.reduce((sum, day) => sum + (day.completedTopicIds?.length || 0), 0) || 0;
+  const completion = totalPlanItems ? Math.round(completedPlanItems / totalPlanItems * 100) : 0;
 
   return (
     <aside className="preparation-plan-sidebar" aria-labelledby="preparation-plan-title">
@@ -78,11 +104,11 @@ export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onCre
         </div>
       )}
 
-      {course && courseHasProgress && !activePlan && (
+      {course && courseHasProgress && (!activePlan || editing) && (
         <form className="preparation-plan-form" onSubmit={submitPlan}>
           <div>
             <span className="eyebrow">Выбранный курс</span>
-            <h3>{course.title}</h3>
+            <h3>{editing ? 'Изменить план' : course.title}</h3>
             <p>Слабые темы попадут в расписание раньше и будут повторяться чаще.</p>
           </div>
           <label>
@@ -104,12 +130,13 @@ export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onCre
             </select>
           </label>
           <button className="button primary" type="submit">
-            Создать план <span aria-hidden="true">→</span>
+            {editing ? 'Пересоздать план' : 'Создать план'} <span aria-hidden="true">→</span>
           </button>
+          {editing && <button className="button secondary" type="button" onClick={() => setEditing(false)}>Отмена</button>}
         </form>
       )}
 
-      {course && activePlan && today && (
+      {course && activePlan && today && !editing && (
         <div className="preparation-plan-summary">
           <div className="preparation-plan-course">
             <span className="eyebrow">Активный курс</span>
@@ -119,6 +146,7 @@ export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onCre
             <div><strong>{today.daysRemaining}</strong><span>дней осталось</span></div>
             <div><strong>{activePlan.minutesPerDay}</strong><span>минут в день</span></div>
           </div>
+          <div className="plan-completion"><span>Выполнено</span><strong>{completion}%</strong><progress max="100" value={completion}>{completion}%</progress></div>
           <div className="preparation-plan-days" aria-label="Ближайшие дни плана">
             {upcomingDays.map((day, index) => (
               <section
@@ -131,9 +159,10 @@ export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onCre
                 </header>
                 <div className="preparation-plan-topic-list">
                   {day.topics.map(topic => (
-                    <div key={topic.id}>
+                    <div key={topic.id} className={(day.completedTopicIds || []).includes(topic.id) ? 'is-complete' : ''}>
                       <span>{topic.title}</span>
                       <small>{topic.cards} {cardWord(topic.cards)}</small>
+                      <button type="button" aria-pressed={(day.completedTopicIds || []).includes(topic.id)} onClick={() => toggleDayTopic(day.day, topic.id)}>{(day.completedTopicIds || []).includes(topic.id) ? 'Выполнено' : 'Отметить'}</button>
                     </div>
                   ))}
                 </div>
@@ -147,6 +176,7 @@ export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onCre
           >
             Продолжить план <span aria-hidden="true">→</span>
           </Link>
+          <div className="plan-manage-actions"><button className="text-button" type="button" onClick={() => { setDays(activePlan.days); setMinutes(activePlan.minutesPerDay); setEditing(true); }}>Изменить</button><button className="text-button danger" type="button" onClick={onDeletePlan}>Отменить план</button></div>
         </div>
       )}
 

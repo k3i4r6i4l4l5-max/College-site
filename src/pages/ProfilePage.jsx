@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { average, courses, topics } from '../data';
+import { average } from '../utils/numbers';
+import { useCatalog } from '../context/CatalogContext';
 import { Breadcrumb } from '../components/Breadcrumb';
 import { ActivityCharts } from '../components/ActivityCharts';
 import { ProfileCourses } from '../components/ProfileCourses';
+import { SectionErrorBoundary } from '../components/SectionErrorBoundary';
 
-export function ProfilePage({ activity, progress, user, onUpdate }) {
+export function ProfilePage({ activity, progress, user, userCourses, onUpdate }) {
+  const { topics } = useCatalog();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(user);
   const [message, setMessage] = useState('');
@@ -91,13 +94,13 @@ export function ProfilePage({ activity, progress, user, onUpdate }) {
         </div>
         {message && <p className="profile-message" role="status">{message}</p>}
         <div className="profile-stats" aria-label="Общая статистика">
-          <div><span>Курсы</span><strong>{courses.length}</strong><small>доступно</small></div>
+          <div><span>Курсы</span><strong>{userCourses.filter(item => item.status === 'active').length}</strong><small>активно</small></div>
           <div><span>Темы</span><strong>{topics.length}</strong><small>{activeTopics} начато</small></div>
           <div><span>Общий прогресс</span><strong>{overall}%</strong><small>по всем темам</small></div>
         </div>
       </section>
-      <ProfileCourses progress={progress} />
-      <ActivityCharts activity={activity} />
+      <SectionErrorBoundary><ProfileCourses progress={progress} userCourses={userCourses} /></SectionErrorBoundary>
+      <SectionErrorBoundary><ActivityCharts activity={activity} /></SectionErrorBoundary>
     </div>
   );
 }

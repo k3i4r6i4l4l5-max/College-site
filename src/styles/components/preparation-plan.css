@@ -228,3 +228,10 @@
     display: none;
   }
 }
+.plan-completion { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; font-size: 11px; color: var(--muted); }
+.plan-completion progress { grid-column: 1 / -1; width: 100%; accent-color: var(--accent); }
+.preparation-plan-topic-list > div { flex-wrap: wrap; }
+.preparation-plan-topic-list > div button { border: 0; padding: 4px 7px; border-radius: 7px; color: var(--accent); background: transparent; font-size: 9px; }
+.preparation-plan-topic-list > div.is-complete span { text-decoration: line-through; opacity: .65; }
+.plan-manage-actions { display: flex; justify-content: space-between; gap: 12px; }
+.text-button.danger { color: #b43f32; }

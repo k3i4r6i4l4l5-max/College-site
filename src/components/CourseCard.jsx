@@ -1,11 +1,15 @@
 import React from 'react';
-import { average } from '../data';
+import { average } from '../utils/numbers';
 import { ProgressBar } from './ProgressBar';
 import { getCourseKnowledgeCounts } from '../utils/progress';
+import { useCatalog } from '../context/CatalogContext';
 
+/** Отображает крупную карточку курса с общим прогрессом и распределением знаний. */
 export function CourseCard({ course, progress, onOpen, selected }) {
+  const { topicById } = useCatalog();
+  // Среднее по темам используется как общий процент прохождения курса.
   const value = average(course.topics.map(id => progress[id]));
-  const knowledge = getCourseKnowledgeCounts(course, progress);
+  const knowledge = getCourseKnowledgeCounts(course, progress, topicById);
 
   return (
     <article className={`course-tile ${selected ? 'selected' : ''}`}>

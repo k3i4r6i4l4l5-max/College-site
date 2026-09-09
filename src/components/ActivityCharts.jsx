@@ -1,20 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { courses } from '../data';
+import { useCatalog } from '../context/CatalogContext';
 import { getCourseActivity } from '../utils/activity';
 
-const weeklyActivity = [
-  { day: 'Пн', date: '31 авг', cards: 4 },
-  { day: 'Вт', date: '1 сен', cards: 9 },
-  { day: 'Ср', date: '2 сен', cards: 6 },
-  { day: 'Чт', date: '3 сен', cards: 13 },
-  { day: 'Пт', date: '4 сен', cards: 8 },
-  { day: 'Сб', date: '5 сен', cards: 17 },
-  { day: 'Вс', date: '6 сен', cards: 11 },
-];
-
-const monthlyActivity = [0, 3, 7, 0, 4, 9, 12, 6, 0, 2, 5, 11, 8, 0, 0, 6, 14, 10, 3, 7, 0, 5, 8, 16, 12, 4, 0, 9, 13, 6];
 const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
+// Преобразует число изученных карточек в уровень интенсивности ячейки календаря.
 function activityLevel(value) {
   if (value === 0) return 0;
   if (value <= 4) return 1;
@@ -31,17 +21,38 @@ const ratingColumns = [
 
 const periods = [1, 3, 7];
 
+/**
+ * Показывает статистику активности: ответы по выбранному курсу,
+ * недельные столбцы и календарь занятий за месяц.
+ */
 export function ActivityCharts({ activity }) {
+  const { courses, courseForTopic } = useCatalog();
   const [courseId, setCourseId] = useState(courses[0].id);
   const [period, setPeriod] = useState(7);
+  const [month, setMonth] = useState(() => new Date().toISOString().slice(0, 7));
+  const weeklyActivity = useMemo(() => Array.from({ length: 7 }, (_, index) => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - (6 - index));
+    const nextDate = new Date(date); nextDate.setDate(nextDate.getDate() + 1);
+    const cards = activity.filter(entry => {
+      const time = Date.parse(entry.timestamp);
+      return time >= date.getTime() && time < nextDate.getTime();
+    }).length;
+    return { day: new Intl.DateTimeFormat('ru-RU', { weekday: 'short' }).format(date), date: new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short' }).format(date), cards };
+  }), [activity]);
+  const monthDate = new Date(`${month}-01T00:00:00`);
+  const monthLength = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
+  const monthlyActivity = useMemo(() => Array.from({ length: monthLength }, (_, index) => activity.filter(entry => {
+    const date = new Date(entry.timestamp);
+    return date.getFullYear() === monthDate.getFullYear() && date.getMonth() === monthDate.getMonth() && date.getDate() === index + 1;
+  }).length), [activity, month, monthLength]);
   const maximum = Math.max(...weeklyActivity.map(item => item.cards));
   const monthTotal = monthlyActivity.reduce((sum, value) => sum + value, 0);
   const activeDays = monthlyActivity.filter(Boolean).length;
   const selectedCourse = courses.find(course => course.id === courseId) || courses[0];
-  const ratingCounts = useMemo(
-    () => getCourseActivity(activity, selectedCourse, period),
-    [activity, selectedCourse, period],
-  );
+  // Пересчитывает распределение ответов только при смене данных, курса или периода.
+  const ratingCounts = useMemo(() => getCourseActivity(activity, selectedCourse, period, courseForTopic), [activity, selectedCourse, period, courseForTopic]);
   const ratingMaximum = Math.max(1, ...Object.values(ratingCounts));
   const ratingTotal = Object.values(ratingCounts).reduce((sum, value) => sum + value, 0);
 
@@ -132,22 +143,22 @@ export function ActivityCharts({ activity }) {
         <article className="activity-chart-card monthly-chart-card">
           <header>
             <div>
-              <h3>Сентябрь</h3>
+              <h3>{new Intl.DateTimeFormat('ru-RU', { month: 'long', year: 'numeric' }).format(monthDate)}</h3>
               <p>Ежедневная активность в течение месяца</p>
             </div>
-            <strong>{activeDays}<small> дней</small></strong>
+            <label className="activity-month-picker"><span className="sr-only">Месяц</span><input type="month" value={month} onChange={event => setMonth(event.target.value)} /></label>
           </header>
           <div className="month-weekdays" aria-hidden="true">
             {weekDays.map(day => <span key={day}>{day}</span>)}
           </div>
           <div className="month-activity-grid" aria-label="Календарь активности за сентябрь">
-            <span className="month-offset" aria-hidden="true" />
+            {Array.from({ length: (monthDate.getDay() + 6) % 7 }, (_, index) => <span className="month-offset" aria-hidden="true" key={`offset-${index}`} />)}
             {monthlyActivity.map((value, index) => (
               <span
                 className={`activity-day level-${activityLevel(value)}`}
                 key={index}
-                title={`${index + 1} сентября: ${value} карточек`}
-                aria-label={`${index + 1} сентября: ${value} карточек`}
+                title={`${index + 1}: ${value} карточек`}
+                aria-label={`${index + 1}: ${value} карточек`}
               >
                 <small>{index + 1}</small>
               </span>

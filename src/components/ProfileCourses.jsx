@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { average, courses } from '../data';
+import { average } from '../utils/numbers';
+import { useCatalog } from '../context/CatalogContext';
 import { ProgressBar } from './ProgressBar';
 
-export function ProfileCourses({ progress }) {
+/** Показывает курсы пользователя и рассчитывает средний прогресс каждого курса. */
+export function ProfileCourses({ progress, userCourses = [] }) {
+  const { courses } = useCatalog();
+  const visibleCourses = courses.filter(course => userCourses.some(item => item.courseId === course.id && item.status !== 'archived'));
   return (
     <section className="profile-section profile-courses" aria-labelledby="profile-courses-title">
       <div className="profile-section-heading">
@@ -11,10 +15,10 @@ export function ProfileCourses({ progress }) {
           <span className="eyebrow">Ваша библиотека</span>
           <h2 id="profile-courses-title">Мои курсы</h2>
         </div>
-        <span>{courses.length} курса</span>
+        <span>{visibleCourses.length} курса</span>
       </div>
       <div className="profile-course-grid">
-        {courses.map(course => {
+        {visibleCourses.map(course => {
           const value = average(course.topics.map(topicId => progress[topicId]));
           return (
             <Link className="profile-course-item" to={`/courses/${course.id}`} key={course.id}>

@@ -1,5 +1,6 @@
 import React from 'react';
 
+/** Отображает доступный индикатор прогресса от 0 до 100 процентов. */
 export function ProgressBar({ value, label = 'Освоено' }) {
   return (
     <div

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { courses } from '../data';
+import { useCatalog } from '../context/CatalogContext';
 
 const communityCourses = [
   {
@@ -57,6 +57,7 @@ function CatalogCard({ title, description, meta, symbol, image, to, badge }) {
 }
 
 export function CommunityPage() {
+  const { courses } = useCatalog();
   return (
     <div className="community-page">
       <header className="page-heading community-heading">

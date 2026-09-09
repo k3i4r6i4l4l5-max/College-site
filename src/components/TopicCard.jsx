@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ProgressBar } from './ProgressBar';
 
+/** Показывает тему курса, её прогресс и ссылку на подробную страницу. */
 export function TopicCard({ topic, value }) {
   return (
     <Link className="topic-row" to={`/topics/${topic.id}`}>

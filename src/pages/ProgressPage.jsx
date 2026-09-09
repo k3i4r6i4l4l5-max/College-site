@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { average, courses, topicById } from '../data';
+import { average } from '../utils/numbers';
+import { useCatalog } from '../context/CatalogContext';
 import { CourseDropdown } from '../components/CourseDropdown';
 import { ProgressBar } from '../components/ProgressBar';
 import { TopicCard } from '../components/TopicCard';
 import { ProblemCards } from '../components/ProblemCards';
 import { KnowledgeDynamics } from '../components/KnowledgeDynamics';
+import { SectionErrorBoundary } from '../components/SectionErrorBoundary';
 
 export function ProgressPage({ activity, progress }) {
+  const { courses, topicById } = useCatalog();
   const [courseId, setCourseId] = useState('java');
   const course = courses.find(item => item.id === courseId);
   const selectedTopics = course.topics.map(topicById);
@@ -77,8 +80,8 @@ export function ProgressPage({ activity, progress }) {
         </aside>
       </div>
       <div className="progress-insights">
-        <ProblemCards activity={activity} course={course} progress={progress} />
-        <KnowledgeDynamics activity={activity} course={course} />
+        <SectionErrorBoundary><ProblemCards activity={activity} course={course} progress={progress} /></SectionErrorBoundary>
+        <SectionErrorBoundary><KnowledgeDynamics activity={activity} course={course} /></SectionErrorBoundary>
       </div>
     </>
   );

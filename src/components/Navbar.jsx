@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 
+/** Показывает основную навигацию и отмечает активный раздел приложения. */
 export function Navbar({ user }) {
   const location = useLocation();
   const initial = user.name.trim().charAt(0).toUpperCase() || 'У';
 
+  // Класс состояния перемещает общий активный индикатор к текущему пункту меню.
   const switchState = location.pathname === '/progress'
     ? 'show-progress'
     : location.pathname === '/community'

@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { getProblemCards } from '../utils/activity';
+import { useCatalog } from '../context/CatalogContext';
 
+// Подбирает правильную форму слова «ответ» для переданного количества.
 function answerWord(value) {
   const lastTwo = value % 100;
   const last = value % 10;
@@ -11,8 +13,11 @@ function answerWord(value) {
   return 'ответов';
 }
 
+/** Выводит до пяти карточек курса с наибольшим числом сложных ответов. */
 export function ProblemCards({ activity, course, progress }) {
-  const cards = useMemo(() => getProblemCards(activity, course), [activity, course]);
+  const { topicById } = useCatalog();
+  // Повторно ранжирует карточки только после изменения активности или курса.
+  const cards = useMemo(() => getProblemCards(activity, course, topicById), [activity, course, topicById]);
 
   return (
     <section className="progress-insight-card problem-cards" aria-labelledby="problem-cards-title">

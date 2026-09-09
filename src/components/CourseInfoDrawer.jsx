@@ -1,17 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { topicById } from '../data';
+import { useCatalog } from '../context/CatalogContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { getCourseKnowledgeCounts } from '../utils/progress';
 
+/** Показывает количество карточек, темы и категории знаний выбранного курса. */
 export function CourseInfoDrawer({ course, progress, open, onClose }) {
+  const { topicById } = useCatalog();
+  // Сохраняет фокус на панели и блокирует прокрутку страницы во время просмотра.
   useBodyScrollLock(open, onClose);
 
   if (!course) return null;
 
+  // Подготавливает итоговые числа для информационных блоков панели.
   const courseTopics = course.topics.map(topicById).filter(Boolean);
   const cardCount = courseTopics.reduce((total, topic) => total + topic.cards.length, 0);
-  const categoryCounts = getCourseKnowledgeCounts(course, progress);
+  const categoryCounts = getCourseKnowledgeCounts(course, progress, topicById);
 
   return (
     <div className={`course-info-layer ${open ? 'open' : ''}`} aria-hidden={!open}>

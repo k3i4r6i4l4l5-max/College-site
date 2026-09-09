@@ -24,6 +24,7 @@ export function AuthPage({ user, onAuthenticate }) {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [nickname, setNickname] = useState('');
   const [error, setError] = useState('');
+  const [pending, setPending] = useState(false);
   const navigate = useNavigate();
 
   function changeMode(nextMode) {
@@ -33,12 +34,20 @@ export function AuthPage({ user, onAuthenticate }) {
     setError('');
   }
 
-  function testLogin() {
-    onAuthenticate(DEFAULT_USER);
-    navigate('/');
+  async function testLogin() {
+    setPending(true);
+    setError('');
+    try {
+      await onAuthenticate('login', { email: DEFAULT_USER.email, password: 'demo-password' });
+      navigate('/');
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setPending(false);
+    }
   }
 
-  function submit(event) {
+  async function submit(event) {
     event.preventDefault();
     setError('');
 
@@ -55,13 +64,19 @@ export function AuthPage({ user, onAuthenticate }) {
       return;
     }
 
-    const fallbackName = email.split('@')[0] || 'Пользователь';
-    const loginName = user.email === email.trim() ? user.name : fallbackName;
-    onAuthenticate({
-      name: mode === 'register' ? nickname.trim() : loginName,
-      email: email.trim(),
-    });
-    navigate('/');
+    setPending(true);
+    try {
+      await onAuthenticate(mode, {
+        name: mode === 'register' ? nickname.trim() : undefined,
+        email: email.trim(),
+        password,
+      });
+      navigate('/');
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setPending(false);
+    }
   }
 
   return (
@@ -158,14 +173,14 @@ export function AuthPage({ user, onAuthenticate }) {
               </>
             )}
             {error && <p className="auth-error" role="alert">{error}</p>}
-            <button className="button primary auth-submit" type="submit">
-              {mode === 'login' ? 'Войти' : 'Зарегистрироваться'} <span aria-hidden="true">→</span>
+            <button className="button primary auth-submit" type="submit" disabled={pending}>
+              {pending ? 'Подождите…' : mode === 'login' ? 'Войти' : 'Зарегистрироваться'} {!pending && <span aria-hidden="true">→</span>}
             </button>
           </form>
-          <button type="button" className="button secondary auth-test-login" onClick={testLogin}>
+          <button type="button" className="button secondary auth-test-login" onClick={testLogin} disabled={pending}>
             Тестовый вход <span aria-hidden="true">→</span>
           </button>
-          <p className="auth-caption">Сессия и настройки сохраняются в этом браузере.</p>
+          <p className="auth-caption">Сессия синхронизируется через единый слой данных.</p>
         </section>
       </div>
     </main>

@@ -1,23 +1,10 @@
-import { STORAGE_KEYS } from '../constants';
-import { topicById } from '../data';
-
 const MINUTES_PER_TOPIC = 20;
 
 function clampNumber(value, min, max) {
   return Math.min(max, Math.max(min, Number(value) || min));
 }
 
-export function readPreparationPlan() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.preparationPlan));
-    if (!saved?.courseId || !Array.isArray(saved.schedule)) return null;
-    return saved;
-  } catch {
-    return null;
-  }
-}
-
-export function createPreparationPlan(course, progress, requestedDays, requestedMinutes) {
+export function createPreparationPlan(course, progress, requestedDays, requestedMinutes, topicById) {
   const days = clampNumber(requestedDays, 1, 60);
   const minutesPerDay = clampNumber(requestedMinutes, 15, 180);
   const topics = course.topics
@@ -47,24 +34,17 @@ export function createPreparationPlan(course, progress, requestedDays, requested
       return topicId;
     });
 
-    return { day: dayIndex + 1, topicIds };
+    return { day: dayIndex + 1, topicIds, completedTopicIds: [] };
   });
 
   return {
+    id: crypto.randomUUID(),
     courseId: course.id,
     days,
     minutesPerDay,
     createdAt: new Date().toISOString(),
     schedule,
   };
-}
-
-export function savePreparationPlan(plan) {
-  try {
-    localStorage.setItem(STORAGE_KEYS.preparationPlan, JSON.stringify(plan));
-  } catch {
-    // План продолжает работать в состоянии React, если localStorage недоступен.
-  }
 }
 
 export function preparationPlanToday(plan) {

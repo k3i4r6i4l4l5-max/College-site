@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { courseForTopic, topicById } from '../data';
+import { useCatalog } from '../context/CatalogContext';
 import { Breadcrumb } from '../components/Breadcrumb';
 import { NotFoundPage } from './NotFoundPage';
 
 export function TopicPage({ progress }) {
+  const { courseForTopic, topicById } = useCatalog();
   const { id } = useParams();
   const topic = topicById(id);
   if (!topic) return <NotFoundPage />;

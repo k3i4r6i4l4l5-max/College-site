@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { topicById } from '../data';
+import { useCatalog } from '../context/CatalogContext';
 import { getTopicProgressHistory } from '../utils/activity';
 
 const chart = {
@@ -11,23 +11,29 @@ const chart = {
   bottom: 38,
 };
 
+// Форматирует дату тренировки для короткой подписи на оси графика.
 function formatDate(timestamp) {
   return new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short' }).format(new Date(timestamp));
 }
 
+/** Строит историю изменения знания выбранной темы после тренировок. */
 export function KnowledgeDynamics({ activity, course }) {
+  const { topicById } = useCatalog();
   const [topicId, setTopicId] = useState(course.topics[0]);
 
+  // При смене курса автоматически выбирает его первую тему.
   useEffect(() => {
     setTopicId(course.topics[0]);
   }, [course]);
 
+  // Получает сохранённые точки прогресса только для текущей темы.
   const points = useMemo(
     () => getTopicProgressHistory(activity, topicId),
     [activity, topicId],
   );
   const plotWidth = chart.width - chart.left - chart.right;
   const plotHeight = chart.height - chart.top - chart.bottom;
+  // Переводит проценты и порядковые номера тренировок в координаты SVG.
   const coordinates = points.map((point, index) => ({
     ...point,
     x: points.length === 1

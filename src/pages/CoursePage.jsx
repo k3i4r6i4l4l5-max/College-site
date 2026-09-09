@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { average, courses, topicById } from '../data';
+import { average } from '../utils/numbers';
+import { useCatalog } from '../context/CatalogContext';
 import { Breadcrumb } from '../components/Breadcrumb';
 import { CourseInfoDrawer } from '../components/CourseInfoDrawer';
 import { ProgressBar } from '../components/ProgressBar';
 import { TopicCard } from '../components/TopicCard';
 import { NotFoundPage } from './NotFoundPage';
 
-export function CoursePage({ progress, onPlanCourse }) {
+export function CoursePage({ progress, onPlanCourse, userCourses, onUpdateCourse }) {
+  const { courseById, topicById } = useCatalog();
   const { id } = useParams();
   const [infoOpen, setInfoOpen] = useState(false);
-  const course = courses.find(item => item.id === id);
+  const course = courseById(id);
+  const membership = userCourses.find(item => item.courseId === id);
 
   useEffect(() => setInfoOpen(false), [id]);
 
@@ -27,6 +30,12 @@ export function CoursePage({ progress, onPlanCourse }) {
         <h1>{course.title}</h1>
         <p>{course.description}</p>
         <div className="course-heading-actions">
+          <button type="button" className="button secondary" onClick={() => onUpdateCourse(id, { status: membership?.status === 'active' ? 'archived' : 'active' })}>
+            {membership?.status === 'active' ? 'В архив' : 'Добавить в мои курсы'}
+          </button>
+          <button type="button" className="button secondary" aria-pressed={Boolean(membership?.favorite)} onClick={() => onUpdateCourse(id, { favorite: !membership?.favorite, status: membership?.status || 'active' })}>
+            {membership?.favorite ? '★ В избранном' : '☆ В избранное'}
+          </button>
           <button type="button" className="course-info-open" onClick={() => setInfoOpen(true)}>
             Информация о курсе <span aria-hidden="true">→</span>
           </button>

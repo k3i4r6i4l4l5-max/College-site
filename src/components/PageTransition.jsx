@@ -3,10 +3,15 @@ import React, { useEffect, useRef, useState } from 'react';
 const FADE_DURATION = 260;
 const COURSE_SWIPE_DURATION = 520;
 
+// Создаёт стабильный ключ страницы с учётом пути и query-параметров.
 function locationKey(location) {
   return `${location.pathname}${location.search}`;
 }
 
+/**
+ * Сохраняет предыдущую страницу на время анимации и переключает между
+ * обычным затуханием и вертикальным переходом между курсами.
+ */
 export function PageTransition({ location, transitionIntent, children }) {
   const [displayedLocation, setDisplayedLocation] = useState(location);
   const [outgoingLocation, setOutgoingLocation] = useState(null);
@@ -17,6 +22,7 @@ export function PageTransition({ location, transitionIntent, children }) {
   const displayedKey = useRef(locationKey(location));
   const displayedLocationRef = useRef(location);
 
+  // Запускает новую анимацию при каждом изменении адреса, включая быстрые переходы.
   useEffect(() => {
     const nextKey = locationKey(location);
     if (nextKey === displayedKey.current) return undefined;
@@ -33,6 +39,7 @@ export function PageTransition({ location, transitionIntent, children }) {
       transitionIntent.current = { style: 'fade', direction: 'down' };
     }
 
+    // Системная настройка и настройка приложения полностью отключают переход.
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       || document.documentElement.dataset.reduceMotion === 'true';
     if (reducedMotion) {
@@ -46,6 +53,7 @@ export function PageTransition({ location, transitionIntent, children }) {
       return undefined;
     }
 
+    // Запоминает обе страницы, чтобы CSS мог одновременно анимировать вход и выход.
     const nextStyle = requestedStyle === 'course-swipe' ? 'course-swipe' : 'fade';
     const previousLocation = displayedLocationRef.current;
     displayedKey.current = nextKey;

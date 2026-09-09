@@ -5,6 +5,9 @@ export const STORAGE_KEYS = {
   preparationPlan: 'practice-preparation-plan-v1',
   auth: 'practice-auth-v1',
   user: 'practice-user-v1',
+  activeTraining: 'practice-active-training-v1',
+  userCourses: 'practice-user-courses-v1',
+  mockAccounts: 'practice-mock-accounts-v1',
 };
 
 export const DEFAULT_USER = {
