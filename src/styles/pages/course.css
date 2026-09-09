@@ -214,7 +214,7 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  margin-top: 20px;
+  min-height: 38px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -232,11 +232,11 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
+  margin-top: 20px;
 }
 
 .course-plan-button {
   min-height: 38px;
-  margin-top: 20px;
   padding-inline: 18px;
 }
 

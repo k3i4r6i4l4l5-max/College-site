@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DEFAULT_USER } from '../constants';
+import { DEFAULT_USER, STORAGE_KEYS } from '../constants';
 
 function AuthIntro({ position }) {
   return (
@@ -39,6 +39,10 @@ export function AuthPage({ user, onAuthenticate }) {
     setError('');
     try {
       await onAuthenticate('login', { email: DEFAULT_USER.email, password: 'demo-password' });
+      if (localStorage.getItem(STORAGE_KEYS.onboardingSeen) !== 'true') {
+        window.location.assign(`${import.meta.env.BASE_URL}guide.html`);
+        return;
+      }
       navigate('/');
     } catch (requestError) {
       setError(requestError.message);
