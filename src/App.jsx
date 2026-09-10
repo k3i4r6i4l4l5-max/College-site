@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import { DEFAULT_SETTINGS, DEFAULT_USER } from './constants';
+import { DEFAULT_SETTINGS, DEFAULT_USER, STORAGE_KEYS } from './constants';
 import { authService, catalogService, userService, trainingService, progressService, planService } from './api/domainServices';
 import { CatalogProvider } from './context/CatalogContext';
 import { applySettings, readSettings } from './utils/settings';
@@ -23,6 +23,7 @@ import { TrainingPage } from './pages/TrainingPage';
 import { SettingsPage } from './pages/SettingsPage';
 
 const emptyCatalog = { courses: [], topics: [] };
+const readCollapsed = key => localStorage.getItem(key) === 'true';
 
 export function App() {
   const [session, setSession] = useState({ loading: true, authenticated: false, user: DEFAULT_USER });
@@ -35,6 +36,8 @@ export function App() {
   const [userCourses, setUserCourses] = useState([]);
   const [settings, setSettings] = useState(readSettings);
   const [planningCourseId, setPlanningCourseId] = useState(null);
+  const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useState(() => readCollapsed(STORAGE_KEYS.leftSidebarCollapsed));
+  const [rightSidebarCollapsed, setRightSidebarCollapsed] = useState(() => readCollapsed(STORAGE_KEYS.rightSidebarCollapsed));
   const routeTransitionIntent = useRef({ style: 'fade', direction: 'down' });
   const location = useLocation();
 
@@ -122,6 +125,22 @@ export function App() {
     setSettings(DEFAULT_SETTINGS);
   }
 
+  function toggleSidebar(side) {
+    if (side === 'left') {
+      setLeftSidebarCollapsed(current => {
+        const next = !current;
+        localStorage.setItem(STORAGE_KEYS.leftSidebarCollapsed, String(next));
+        return next;
+      });
+      return;
+    }
+    setRightSidebarCollapsed(current => {
+      const next = !current;
+      localStorage.setItem(STORAGE_KEYS.rightSidebarCollapsed, String(next));
+      return next;
+    });
+  }
+
   if (session.loading) return <main className="container"><LoadingState label="Проверяем сессию" rows={4} /></main>;
   if (!session.authenticated) return <AuthPage user={session.user} onAuthenticate={authenticate} />;
   if (workspace.loading) return <main className="container"><LoadingState label="Загружаем учебные данные" rows={5} /></main>;
@@ -132,8 +151,8 @@ export function App() {
     <CatalogProvider catalog={catalog}>
       <a className="skip-link" href="#main">К содержимому</a>
       <Navbar user={session.user} />
-      <div className={`app-shell${location.pathname === '/profile' ? ' has-profile-sidebar' : ''}`}>
-        <PopularCoursesSidebar userCourses={userCourses} onCourseNavigate={direction => { routeTransitionIntent.current = { style: 'course-swipe', direction }; }} />
+      <div className={`app-shell${location.pathname === '/profile' ? ' has-profile-sidebar' : ''}${leftSidebarCollapsed ? ' left-sidebar-collapsed' : ''}${rightSidebarCollapsed ? ' right-sidebar-collapsed' : ''}`}>
+        <PopularCoursesSidebar collapsed={leftSidebarCollapsed} onToggle={() => toggleSidebar('left')} userCourses={userCourses} onCourseNavigate={direction => { routeTransitionIntent.current = { style: 'course-swipe', direction }; }} />
         <main id="main" className="container">
           <PageTransition location={location} transitionIntent={routeTransitionIntent}>
             {routeLocation => (
@@ -151,7 +170,7 @@ export function App() {
             )}
           </PageTransition>
         </main>
-        <PreparationPlanSidebar selectedCourseId={planningCourseId} progress={progress} plan={preparationPlan} onSavePlan={savePlan} onDeletePlan={deletePlan}>
+        <PreparationPlanSidebar collapsed={rightSidebarCollapsed} onToggle={() => toggleSidebar('right')} selectedCourseId={planningCourseId} progress={progress} plan={preparationPlan} onSavePlan={savePlan} onDeletePlan={deletePlan}>
           {location.pathname === '/profile' && <ProfileStudySidebar embedded activity={activity} progress={progress} />}
         </PreparationPlanSidebar>
       </div>

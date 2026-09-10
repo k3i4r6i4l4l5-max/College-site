@@ -4,6 +4,7 @@
  */
 
 .preparation-plan-sidebar {
+  grid-column: 3;
   position: sticky;
   top: 43px;
   align-self: start;
@@ -18,10 +19,11 @@
   box-shadow: -12px 14px 34px rgba(61,47,36,.075);
   display: flex;
   flex-direction: column;
+  transition: height .28s ease,padding .28s ease,border-radius .28s ease,box-shadow .28s ease;
 }
 
 .preparation-plan-heading {
-  padding: 2px 2px 20px;
+  padding: 2px 42px 20px 2px;
   border-bottom: 1px solid #eee9e3;
 }
 

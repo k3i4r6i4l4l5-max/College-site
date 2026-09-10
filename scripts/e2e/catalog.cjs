@@ -13,5 +13,9 @@ module.exports = {
     assert.equal(await page.locator('.course-tile').count(), 1);
     await page.getByRole('button', { name: 'Сбросить' }).click();
     await page.getByRole('heading', { name: 'Курсы 3' }).waitFor();
+    await page.getByRole('button', { name: 'Свернуть левую панель' }).click();
+    await page.getByRole('button', { name: 'Развернуть левую панель' }).waitFor();
+    await page.getByRole('button', { name: 'Свернуть правую панель' }).click();
+    await page.getByRole('button', { name: 'Развернуть правую панель' }).waitFor();
   },
 };

@@ -31,7 +31,7 @@ function groupTopics(topicIds, topicById) {
  * Создаёт план подготовки и показывает ближайшие семь дней активного плана
  * в постоянном правом сайдбаре.
  */
-export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onSavePlan, onDeletePlan, children }) {
+export function PreparationPlanSidebar({ collapsed = false, onToggle, selectedCourseId, progress, plan, onSavePlan, onDeletePlan, children }) {
   const { courses, topicById } = useCatalog();
   const [days, setDays] = useState(7);
   const [minutes, setMinutes] = useState(30);
@@ -90,7 +90,17 @@ export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onSav
   const completion = totalPlanItems ? Math.round(completedPlanItems / totalPlanItems * 100) : 0;
 
   return (
-    <aside className="preparation-plan-sidebar" aria-labelledby="preparation-plan-title">
+    <aside className={`preparation-plan-sidebar${collapsed ? ' is-collapsed' : ''}`} aria-label="План подготовки">
+      <button
+        type="button"
+        className="sidebar-toggle"
+        aria-label={collapsed ? 'Развернуть правую панель' : 'Свернуть правую панель'}
+        aria-expanded={!collapsed}
+        onClick={onToggle}
+      >
+        <span aria-hidden="true">{collapsed ? '‹' : '›'}</span>
+      </button>
+      {!collapsed && <>
       <header className="preparation-plan-heading">
         <span className="eyebrow">Персональный маршрут</span>
         <h2 id="preparation-plan-title">План подготовки</h2>
@@ -181,6 +191,7 @@ export function PreparationPlanSidebar({ selectedCourseId, progress, plan, onSav
       )}
 
       {children}
+      </>}
     </aside>
   );
 }

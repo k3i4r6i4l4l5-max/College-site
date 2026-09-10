@@ -9,6 +9,8 @@ export const STORAGE_KEYS = {
   userCourses: 'practice-user-courses-v1',
   mockAccounts: 'practice-mock-accounts-v1',
   onboardingSeen: 'practice-onboarding-seen-v1',
+  leftSidebarCollapsed: 'practice-left-sidebar-collapsed-v1',
+  rightSidebarCollapsed: 'practice-right-sidebar-collapsed-v1',
 };
 
 export const DEFAULT_USER = {

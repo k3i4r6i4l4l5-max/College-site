@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCatalog } from '../context/CatalogContext';
 import { average } from '../utils/numbers';
@@ -21,12 +21,15 @@ export function CoursesPage({ progress, activity, activeTraining, userCourses })
   const [drawerCourse, setDrawerCourse] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [continueOpen, setContinueOpen] = useState(false);
-  const query = params.get('q') || '';
+  const queryParam = params.get('q') || '';
+  const [query, setQuery] = useState(queryParam);
   const category = params.get('category') || 'all';
   const status = params.get('status') || 'active';
   const sort = params.get('sort') || 'popular';
   const userCourseMap = new Map(userCourses.map(item => [item.courseId, item]));
   const categories = [...new Set(courses.map(course => course.category))];
+
+  useEffect(() => setQuery(queryParam), [queryParam]);
 
   const visibleCourses = useMemo(() => courses
     .filter(course => `${course.title} ${course.description}`.toLowerCase().includes(query.toLowerCase()))
@@ -73,7 +76,7 @@ export function CoursesPage({ progress, activity, activeTraining, userCourses })
       </section>
 
       <section className="catalog-controls" aria-label="Фильтры каталога">
-        <label className="catalog-search"><span>Поиск</span><input type="search" value={query} placeholder="Название или описание" onChange={event => updateParam('q', event.target.value)} /></label>
+        <label className="catalog-search"><span>Поиск</span><input type="search" value={query} placeholder="Название или описание" onChange={event => { setQuery(event.target.value); updateParam('q', event.target.value); }} /></label>
         <label><span>Категория</span><select value={category} onChange={event => updateParam('category', event.target.value)}><option value="all">Все категории</option>{categories.map(item => <option value={item} key={item}>{item}</option>)}</select></label>
         <label><span>Состояние</span><select value={status} onChange={event => updateParam('status', event.target.value)}><option value="all">Все курсы</option><option value="active">Активные</option><option value="archived">Архивные</option><option value="available">Не добавлены</option></select></label>
         <label><span>Сортировка</span><select value={sort} onChange={event => updateParam('sort', event.target.value)}><option value="popular">По популярности</option><option value="progress">По прогрессу</option><option value="newest">Сначала новые</option></select></label>

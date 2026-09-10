@@ -4,7 +4,7 @@ import { useCatalog } from '../context/CatalogContext';
 import { COURSE_POPULARITY, SIDEBAR_FILTERS } from '../constants';
 
 /** Показывает фильтруемый список популярных курсов в постоянном левом сайдбаре. */
-export function PopularCoursesSidebar({ onCourseNavigate, userCourses = [] }) {
+export function PopularCoursesSidebar({ collapsed = false, onToggle, onCourseNavigate, userCourses = [] }) {
   const { courses } = useCatalog();
   const location = useLocation();
   const [filterId, setFilterId] = useState('popular');
@@ -55,7 +55,17 @@ export function PopularCoursesSidebar({ onCourseNavigate, userCourses = [] }) {
   }
 
   return (
-    <aside className="popular-sidebar" aria-labelledby="popular-courses-title">
+    <aside className={`popular-sidebar${collapsed ? ' is-collapsed' : ''}`} aria-label="Популярные курсы">
+      <button
+        type="button"
+        className="sidebar-toggle"
+        aria-label={collapsed ? 'Развернуть левую панель' : 'Свернуть левую панель'}
+        aria-expanded={!collapsed}
+        onClick={onToggle}
+      >
+        <span aria-hidden="true">{collapsed ? '›' : '‹'}</span>
+      </button>
+      {!collapsed && <>
       <div className="popular-sidebar-heading">
         <span className="eyebrow">Подборка курсов</span>
         <h2 id="popular-courses-title">{activeFilter.label}</h2>
@@ -113,6 +123,7 @@ export function PopularCoursesSidebar({ onCourseNavigate, userCourses = [] }) {
           <span className="popular-filter-chevron" aria-hidden="true" />
         </button>
       </div>
+      </>}
     </aside>
   );
 }

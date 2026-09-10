@@ -387,6 +387,19 @@ html[data-theme="dark"] .navbar .nav-switch a.active {
   color: #fff;
 }
 
+html[data-theme="dark"] .sidebar-toggle {
+  border-color: #4a443e;
+  background: #302c28;
+  color: #dc8b61;
+  box-shadow: 0 7px 16px rgba(0,0,0,.22);
+}
+
+html[data-theme="dark"] .sidebar-toggle:hover {
+  border-color: #8c5c43;
+  background: #3a302a;
+  color: #f0ad87;
+}
+
 html[data-theme="dark"] :is(
   .nav-inner,
   .popular-sidebar,
