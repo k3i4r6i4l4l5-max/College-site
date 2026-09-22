@@ -1,0 +1,389 @@
+/* Mobile layout refinements. Kept last so they can override older responsive rules. */
+@media (max-width: 700px) {
+  .navbar {
+    width: calc(100% - 32px);
+    height: auto;
+    min-height: 112px;
+    margin-top: 16px;
+  }
+
+  .nav-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    height: auto;
+    min-height: 110px;
+    padding: 11px 12px;
+    gap: 8px 6px;
+  }
+
+  .brand {
+    grid-column: 1;
+    min-width: 0;
+    height: auto;
+    font-size: 18px;
+    white-space: nowrap;
+  }
+
+  .profile-wrap {
+    grid-column: 2;
+    min-width: 0;
+    margin-left: 0;
+  }
+
+  .profile-launch {
+    height: 38px;
+  }
+
+  .profile-account-link {
+    min-width: 0;
+    gap: 6px;
+    padding: 4px 10px 4px 4px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .profile-label {
+    display: inline;
+    font-size: 12px;
+  }
+
+  .navbar .nav-switch {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    order: initial;
+    width: 100%;
+    height: 40px;
+  }
+
+  .navbar .nav-switch a {
+    height: 40px;
+    min-height: 40px;
+    padding: 0 4px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .app-shell > .container,
+  .app-shell.has-profile-sidebar > .container {
+    padding: 36px 20px 72px;
+  }
+
+  .page-heading {
+    margin-bottom: 34px;
+  }
+
+  .page-heading > .eyebrow {
+    margin-bottom: 14px;
+  }
+
+  .page-heading p,
+  .home-hero > p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .catalog-controls {
+    gap: 16px;
+    margin: 30px 0 25px;
+    padding: 18px;
+  }
+
+  .catalog-controls label {
+    gap: 8px;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .catalog-controls input,
+  .catalog-controls select {
+    min-height: 46px;
+    font-size: 16px;
+  }
+
+  .home-hero {
+    margin-bottom: 34px;
+  }
+
+  .personal-stats,
+  .progress-label,
+  .course-meta,
+  .recommendation-meta,
+  .continue-meta,
+  .continue-progress > span,
+  .profile-course-progress-label,
+  .profile-stats strong {
+    font-family: var(--font-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .personal-stats {
+    gap: 6px 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .course-grid {
+    gap: 24px;
+  }
+
+  .course-card-title {
+    font-family: var(--font-ui);
+    font-size: 18px;
+    line-height: 1.3;
+  }
+
+  .course-card-progress {
+    padding: 17px 16px 18px;
+  }
+
+  .course-card-knowledge > span {
+    min-height: 51px;
+    align-content: center;
+    padding: 8px 4px;
+  }
+
+  .course-card-knowledge small {
+    overflow: visible;
+    font-family: var(--font-ui);
+    font-size: 11px;
+    line-height: 1.3;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  .repeat-banner {
+    margin-top: 28px;
+  }
+
+  .continue-section {
+    margin-top: 46px;
+  }
+
+  .continue-card {
+    padding: 24px;
+  }
+
+  .topic-row {
+    align-items: center;
+    gap: 10px;
+    padding-block: 25px;
+  }
+
+  .topic-row > div:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .topic-row h3,
+  .topic-row p {
+    overflow-wrap: anywhere;
+  }
+
+  .topic-row p,
+  .progress-layout .topic-row p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .tag {
+    display: table;
+    max-width: 100%;
+    margin: 7px 0 0;
+    white-space: normal;
+  }
+
+  .topic-progress,
+  .progress-layout .topic-progress {
+    flex: 0 0 68px;
+    width: 68px;
+  }
+
+  .row-arrow {
+    flex: 0 0 auto;
+  }
+
+  .profile-card {
+    padding: 24px;
+  }
+
+  .profile-person p {
+    overflow-wrap: anywhere;
+  }
+
+  .profile-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .profile-actions > .button {
+    min-width: 0;
+    padding-inline: 10px;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .profile-course-copy > small,
+  .profile-course-copy > strong,
+  .problem-card-copy h3 {
+    font-family: var(--font-ui);
+  }
+
+  .profile-course-copy > small {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  .profile-course-copy > strong {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .profile-course-progress-label {
+    font-size: 11px;
+  }
+
+  .profile-section,
+  .profile-analytics,
+  .progress-insight-card {
+    padding: 24px 20px;
+  }
+
+  .activity-chart-card {
+    padding: 18px;
+  }
+
+  .activity-chart-card h3 {
+    font-size: 17px;
+  }
+
+  .activity-chart-card p,
+  .course-activity-controls label > span,
+  .rating-activity-column > small,
+  .activity-chart-card > header > strong small {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .course-activity-controls select {
+    font-size: 14px;
+  }
+
+  .activity-period-switch button,
+  .activity-bar-value,
+  .activity-bar-column small,
+  .month-weekdays span,
+  .activity-day small,
+  .activity-legend {
+    font-family: var(--font-ui);
+    font-size: 9px;
+  }
+
+  .rating-activity-column > strong {
+    font-family: var(--font-ui);
+    font-size: 12px;
+  }
+
+  .footer {
+    margin-inline: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .navbar {
+    width: calc(100% - 24px);
+    margin-top: 12px;
+  }
+
+  .nav-inner {
+    padding-inline: 10px;
+  }
+
+  .brand {
+    gap: 5px;
+    font-size: 16px;
+  }
+
+  .brand-mark {
+    width: 25px;
+    height: 25px;
+    font-size: 19px;
+  }
+
+  .profile-account-link {
+    gap: 5px;
+    padding-right: 8px;
+    font-size: 11px;
+  }
+
+  .profile-label {
+    font-size: 11px;
+  }
+
+  .profile-avatar {
+    width: 26px;
+    height: 26px;
+  }
+
+  .navbar .nav-switch a {
+    font-size: 12px;
+  }
+
+  .app-shell > .container,
+  .app-shell.has-profile-sidebar > .container {
+    padding-inline: 16px;
+  }
+
+  .catalog-controls {
+    padding: 16px;
+  }
+
+  .profile-card {
+    padding: 20px;
+  }
+
+  .profile-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-course-item {
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .profile-course-copy {
+    min-width: 0;
+    padding-right: 20px;
+  }
+
+  .profile-course-copy > strong {
+    overflow-wrap: anywhere;
+  }
+
+  .profile-course-progress-label {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .profile-section,
+  .profile-analytics,
+  .progress-insight-card {
+    padding: 20px 16px;
+  }
+
+  .activity-chart-card {
+    padding: 16px 12px;
+  }
+
+  .topic-progress,
+  .progress-layout .topic-progress {
+    flex-basis: 62px;
+    width: 62px;
+  }
+}
