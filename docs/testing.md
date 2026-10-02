@@ -27,6 +27,12 @@ npm run dev
 npm run test:e2e
 ```
 
+Проверка импортов FSD:
+
+```sh
+npm run check:architecture
+```
+
 ## Unit-тесты
 
 Каталог `tests` проверяет:

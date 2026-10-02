@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { clampProgress, getCourseKnowledgeCounts } from '../src/utils/progress.js';
+import { clampProgress, getCourseKnowledgeCounts } from '../src/entities/progress/model/progress.js';
 
 test('прогресс ограничивается диапазоном от 0 до 100', () => {
   assert.equal(clampProgress(-7), 0);

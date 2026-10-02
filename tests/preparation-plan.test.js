@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createPreparationPlan, preparationPlanToday } from '../src/utils/preparationPlan.js';
+import { createPreparationPlan, preparationPlanToday } from '../src/entities/preparation-plan/model/preparationPlan.js';
 
 const topicMap = { weak: { id: 'weak' }, strong: { id: 'strong' } };
 

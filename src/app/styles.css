@@ -1,0 +1,23 @@
+/*
+ * Единая точка подключения стилей.
+ * Сначала загружается общая дизайн-система, затем стили отдельных страниц.
+ */
+
+@import './styles/base.css';
+@import './styles/layout.css';
+@import './styles/components.css';
+@import '../widgets/preparation-plan-sidebar/ui/preparation-plan.css';
+@import '../pages/auth/ui/auth.css';
+@import '../pages/courses/ui/courses.css';
+@import '../pages/course/ui/course.css';
+@import '../pages/topic/ui/topic.css';
+@import '../pages/training/ui/training.css';
+@import '../pages/progress/ui/progress.css';
+@import '../pages/profile/ui/profile.css';
+@import '../pages/community/ui/community.css';
+@import '../pages/not-found/ui/not-found.css';
+@import '../pages/settings/ui/settings.css';
+@import './styles/typography.css';
+@import './styles/async-states.css';
+@import './styles/mobile.css';
+

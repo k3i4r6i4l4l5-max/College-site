@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getProblemCards, getTopicProgressHistory } from '../src/utils/activity.js';
+import { getProblemCards, getTopicProgressHistory } from '../src/entities/activity/model/activity.js';
 
 const topics = { js: { id: 'js', title: 'JavaScript', cards: [['Q1', 'A1'], ['Q2', 'A2']] } };
 const activity = [

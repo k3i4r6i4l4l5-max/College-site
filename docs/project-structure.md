@@ -1,61 +1,26 @@
 # Структура проекта
 
+`src` организован по FSD:
+
 ```text
-College-site/
-├── .github/workflows/
-│   └── deploy-pages.yml
-├── docs/
-├── public/
-│   ├── guide-assets/
-│   ├── images/
-│   └── guide.html
-├── scripts/
-│   ├── e2e/
-│   └── smoke.cjs
-├── src/
-│   ├── api/
-│   ├── components/
-│   ├── context/
-│   ├── hooks/
-│   ├── pages/
-│   ├── styles/
-│   ├── utils/
-│   ├── App.jsx
-│   ├── constants.js
-│   ├── data.js
-│   ├── main.jsx
-│   └── styles.css
-├── tests/
-├── .env.example
-├── index.html
-├── package.json
-└── README.md
+src/
+├── app/                 # точка входа, App, mockBackend, общие стили
+├── pages/               # срез на каждый маршрут; ui/ и index.js
+├── widgets/             # самостоятельные блоки интерфейса
+├── features/            # авторизация, оценка карточки и действия с планом
+├── entities/            # catalog, user, training, progress, activity, preparation-plan
+└── shared/              # api, ui, lib, config
 ```
 
-## Каталоги
+В срезах используются сегменты `ui`, `model` и `api` по необходимости. `index.js` — публичная точка входа среза. Общие стили подключает `src/app/styles.css`; стили страниц лежат рядом с их компонентами.
 
-| Каталог | Ответственность |
+| Путь | Назначение |
 | --- | --- |
-| `.github/workflows` | Автоматическая сборка и публикация GitHub Pages. |
-| `docs` | Расширенная техническая документация. |
-| `public` | Статические изображения и onboarding-презентация. |
-| `scripts/e2e` | Независимые браузерные сценарии. |
-| `src/api` | HTTP-клиент, сервисы и mock-backend. |
-| `src/components` | Переиспользуемые элементы интерфейса. |
-| `src/context` | Контекст каталога. |
-| `src/hooks` | Пользовательские React hooks. |
-| `src/pages` | Компоненты маршрутов. |
-| `src/styles` | База, макет, компоненты и стили страниц. |
-| `src/utils` | Чистые функции расчётов и настройки. |
-| `tests` | Unit-тесты бизнес-расчётов frontend. |
+| `src/app/main.jsx` | Настройки до рендера, React root и HashRouter. |
+| `src/app/App.jsx` | Сессия, загрузка рабочего пространства и маршруты. |
+| `src/app/mockBackend.js` | Локальный источник данных для разработки. |
+| `src/entities/catalog/model/mockData.js` | Демонстрационные курсы, темы и карточки. |
+| `src/shared/api` | HTTP-клиент и переключение источника. |
+| `scripts/check-fsd.cjs` | Проверка направления импортов и публичных API. |
 
-## Основные файлы
-
-| Файл | Назначение |
-| --- | --- |
-| `src/main.jsx` | Точка входа и маршрутизатор. |
-| `src/App.jsx` | Корневое состояние и компоновка приложения. |
-| `src/data.js` | Демонстрационные курсы, темы и карточки. |
-| `src/constants.js` | Ключи хранилища и общие константы. |
-| `src/styles.css` | Единая точка импорта CSS. |
-| `public/guide.html` | Гайд первого тестового входа. |
+`public` содержит изображения и гайд, `tests` — unit-тесты, `scripts/e2e` — браузерные сценарии, `docs` — техническую документацию.
