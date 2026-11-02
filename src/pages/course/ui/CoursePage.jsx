@@ -8,7 +8,7 @@ import { ProgressBar } from '../../../shared/ui/ProgressBar';
 import { TopicCard } from '../../../entities/catalog';
 import { NotFoundState } from '../../../widgets/not-found-state';
 
-export function CoursePage({ progress, onPlanCourse, userCourses, onUpdateCourse }) {
+export function CoursePage({ progress, activity, onPlanCourse, userCourses, onUpdateCourse }) {
   const { courseById, topicById } = useCatalog();
   const { id } = useParams();
   const [infoOpen, setInfoOpen] = useState(false);
@@ -69,6 +69,7 @@ export function CoursePage({ progress, onPlanCourse, userCourses, onUpdateCourse
       <CourseInfoDrawer
         course={course}
         progress={progress}
+        activity={activity}
         open={infoOpen}
         onClose={() => setInfoOpen(false)}
       />

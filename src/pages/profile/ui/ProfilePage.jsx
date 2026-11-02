@@ -13,7 +13,7 @@ export function ProfilePage({ activity, progress, user, userCourses, onUpdate })
   const [draft, setDraft] = useState(user);
   const [message, setMessage] = useState('');
   const overall = average(topics.map(topic => progress[topic.id]));
-  const activeTopics = topics.filter(topic => progress[topic.id] > 0).length;
+  const activeTopics = topics.filter(topic => activity.some(entry => entry.topicId === topic.id)).length;
 
   function submit(event) {
     event.preventDefault();
@@ -95,7 +95,7 @@ export function ProfilePage({ activity, progress, user, userCourses, onUpdate })
         {message && <p className="profile-message" role="status">{message}</p>}
         <div className="profile-stats" aria-label="Общая статистика">
           <div><span>Курсы</span><strong>{userCourses.filter(item => item.status === 'active').length}</strong><small>активно</small></div>
-          <div><span>Темы</span><strong>{topics.length}</strong><small>{activeTopics} начато</small></div>
+          <div><span>Темы</span><strong>{activeTopics}</strong><small>начато из {topics.length}</small></div>
           <div><span>Общий прогресс</span><strong>{overall}%</strong><small>по всем темам</small></div>
         </div>
       </section>

@@ -47,7 +47,7 @@ export function ActivityCharts({ activity }) {
     const date = new Date(entry.timestamp);
     return date.getFullYear() === monthDate.getFullYear() && date.getMonth() === monthDate.getMonth() && date.getDate() === index + 1;
   }).length), [activity, month, monthLength]);
-  const maximum = Math.max(...weeklyActivity.map(item => item.cards));
+  const maximum = Math.max(1, ...weeklyActivity.map(item => item.cards));
   const monthTotal = monthlyActivity.reduce((sum, value) => sum + value, 0);
   const activeDays = monthlyActivity.filter(Boolean).length;
   const selectedCourse = courses.find(course => course.id === courseId) || courses[0];
@@ -132,7 +132,7 @@ export function ActivityCharts({ activity }) {
               <div className="activity-bar-column" key={item.date} title={`${item.date}: ${item.cards} карточек`}>
                 <span className="activity-bar-value">{item.cards}</span>
                 <span className="activity-bar-track">
-                  <span style={{ height: `${Math.max(8, item.cards / maximum * 100)}%` }} />
+                  <span style={{ height: item.cards ? `${Math.max(8, item.cards / maximum * 100)}%` : '0%' }} />
                 </span>
                 <small>{item.day}</small>
               </div>
@@ -151,7 +151,7 @@ export function ActivityCharts({ activity }) {
           <div className="month-weekdays" aria-hidden="true">
             {weekDays.map(day => <span key={day}>{day}</span>)}
           </div>
-          <div className="month-activity-grid" aria-label="Календарь активности за сентябрь">
+          <div className="month-activity-grid" aria-label={`Календарь активности: ${month}`}>
             {Array.from({ length: (monthDate.getDay() + 6) % 7 }, (_, index) => <span className="month-offset" aria-hidden="true" key={`offset-${index}`} />)}
             {monthlyActivity.map((value, index) => (
               <span

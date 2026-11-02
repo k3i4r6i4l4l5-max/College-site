@@ -163,7 +163,7 @@ export function App() {
             {routeLocation => (
               <Routes location={routeLocation}>
                 <Route path="/" element={guarded(<CoursesPage progress={progress} activity={activity} activeTraining={activeTraining} userCourses={userCourses} onUpdateCourse={updateCourse} />)} />
-                <Route path="/courses/:id" element={guarded(<CoursePage progress={progress} userCourses={userCourses} onUpdateCourse={updateCourse} onPlanCourse={setPlanningCourseId} />)} />
+                <Route path="/courses/:id" element={guarded(<CoursePage activity={activity} progress={progress} userCourses={userCourses} onUpdateCourse={updateCourse} onPlanCourse={setPlanningCourseId} />)} />
                 <Route path="/topics/:id" element={guarded(<TopicPage progress={progress} />)} />
                 <Route path="/training" element={guarded(<TrainingPage key={routeLocation.search + routeLocation.key} activeTraining={activeTraining} onTrainingChange={setActiveTraining} onLearningChange={({ progress: nextProgress, activity: nextActivity }) => { setProgress(nextProgress); setActivity(nextActivity); }} />)} />
                 <Route path="/progress" element={guarded(<ProgressPage activity={activity} progress={progress} />)} />

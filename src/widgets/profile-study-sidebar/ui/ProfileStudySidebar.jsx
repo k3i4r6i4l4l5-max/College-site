@@ -8,9 +8,9 @@ import { useCatalog } from '../../../entities/catalog';
  */
 export function ProfileStudySidebar({ embedded = false, activity = [], progress = {} }) {
   const { topics, courseForTopic } = useCatalog();
-  const weakTopics = topics.filter(topic => progress[topic.id] > 0 && progress[topic.id] < 70).sort((a, b) => progress[a.id] - progress[b.id]).slice(0, 3);
+  const weakTopics = topics.filter(topic => activity.some(entry => entry.topicId === topic.id) && progress[topic.id] < 70).sort((a, b) => progress[a.id] - progress[b.id]).slice(0, 3);
   const latest = [...activity].sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp))[0];
-  const latestTopic = topics.find(topic => topic.id === latest?.topicId) || weakTopics[0] || topics[0];
+  const latestTopic = topics.find(topic => topic.id === latest?.topicId);
   const latestCourse = latestTopic && courseForTopic(latestTopic.id);
   const repeatCards = weakTopics.reduce((sum, topic) => sum + topic.cards.length, 0);
   const content = (
@@ -47,24 +47,24 @@ export function ProfileStudySidebar({ embedded = false, activity = [], progress 
 
       <section className="profile-last-card">
         <div className="profile-last-cover" aria-hidden="true">
-          <span className="profile-last-title">{latestCourse?.title || 'Первый курс'}</span>
+          <span className="profile-last-title">{latestCourse?.title || 'Занятий пока нет'}</span>
         </div>
         <div className="profile-last-content">
           <span className="eyebrow">Последняя активность</span>
           <div className="profile-last-topic">
             <div>
               <small>Тема</small>
-              <strong>{latestTopic?.title}</strong>
+              <strong>{latestTopic?.title || 'Начните первую тренировку'}</strong>
             </div>
             <b>{progress[latestTopic?.id] || 0}%</b>
           </div>
-          <div className="profile-last-progress" aria-hidden="true"><span /></div>
+          <div className="profile-last-progress" aria-hidden="true"><span style={{ width: `${progress[latestTopic?.id] || 0}%` }} /></div>
           <div className="profile-last-meta">
             <span>{latestTopic?.cards.length || 0} карточек</span>
             <span>{latest ? new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(latest.timestamp)) : 'нет активности'}</span>
           </div>
-          <Link className="button secondary" to={`/training?topic=${latestTopic?.id}`}>
-            Продолжить <span aria-hidden="true">→</span>
+          <Link className="button secondary" to={latestTopic ? `/training?topic=${latestTopic.id}` : '/'}>
+            {latestTopic ? 'Продолжить' : 'Выбрать курс'} <span aria-hidden="true">→</span>
           </Link>
         </div>
       </section>

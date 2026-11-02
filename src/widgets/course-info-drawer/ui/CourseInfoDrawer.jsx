@@ -5,7 +5,7 @@ import { useBodyScrollLock } from '../../../shared/lib/useBodyScrollLock';
 import { getCourseKnowledgeCounts } from '../../../entities/progress';
 
 /** Показывает количество карточек, темы и категории знаний выбранного курса. */
-export function CourseInfoDrawer({ course, progress, open, onClose }) {
+export function CourseInfoDrawer({ course, progress, activity = [], open, onClose }) {
   const { topicById } = useCatalog();
   // Сохраняет фокус на панели и блокирует прокрутку страницы во время просмотра.
   useBodyScrollLock(open, onClose);
@@ -15,7 +15,7 @@ export function CourseInfoDrawer({ course, progress, open, onClose }) {
   // Подготавливает итоговые числа для информационных блоков панели.
   const courseTopics = course.topics.map(topicById).filter(Boolean);
   const cardCount = courseTopics.reduce((total, topic) => total + topic.cards.length, 0);
-  const categoryCounts = getCourseKnowledgeCounts(course, progress, topicById);
+  const categoryCounts = getCourseKnowledgeCounts(course, activity, topicById);
 
   return (
     <div className={`course-info-layer ${open ? 'open' : ''}`} aria-hidden={!open}>

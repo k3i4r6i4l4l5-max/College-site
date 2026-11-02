@@ -24,7 +24,7 @@ export function CoursesPage({ progress, activity, activeTraining, userCourses })
   const queryParam = params.get('q') || '';
   const [query, setQuery] = useState(queryParam);
   const category = params.get('category') || 'all';
-  const status = params.get('status') || 'active';
+  const status = params.get('status') || 'all';
   const sort = params.get('sort') || 'popular';
   const userCourseMap = new Map(userCourses.map(item => [item.courseId, item]));
   const categories = [...new Set(courses.map(course => course.category))];
@@ -41,7 +41,7 @@ export function CoursesPage({ progress, activity, activeTraining, userCourses })
       return courses.indexOf(left) - courses.indexOf(right);
     }), [courses, query, category, status, sort, progress, userCourses]);
 
-  const weak = topics.filter(topic => progress[topic.id] > 0 && progress[topic.id] < 50);
+  const weak = topics.filter(topic => activity.some(entry => entry.topicId === topic.id) && progress[topic.id] < 50);
   const overall = average(topics.map(topic => progress[topic.id] || 0));
   const latestActivity = [...activity].sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp))[0];
   const activeCard = activeTraining?.deck?.[activeTraining.index];
@@ -57,7 +57,7 @@ export function CoursesPage({ progress, activity, activeTraining, userCourses })
 
   function updateParam(name, value) {
     const next = new URLSearchParams(params);
-    const isDefault = value === '' || value === 'all' || (name === 'status' && value === 'active') || (name === 'sort' && value === 'popular');
+    const isDefault = value === '' || value === 'all' || (name === 'sort' && value === 'popular');
     if (isDefault) next.delete(name); else next.set(name, value);
     setParams(next, { replace: true });
   }
@@ -72,7 +72,7 @@ export function CoursesPage({ progress, activity, activeTraining, userCourses })
       <section className="home-hero">
         <div className="eyebrow">В своём темпе, шаг за шагом</div><h1>Подготовка</h1>
         <p>Разбирайтесь в темах, проверяйте себя и повторяйте то, что важно.</p>
-        <div className="personal-stats" aria-label="Ваша учебная статистика"><span>{userCourses.filter(item => item.status === 'active').length} курса</span><span>{topics.length} тем</span><span>{overall}% общего прогресса</span></div>
+        <div className="personal-stats" aria-label="Ваша учебная статистика"><span>{userCourses.filter(item => item.status === 'active').length} курса</span><span>{topics.filter(topic => activity.some(entry => entry.topicId === topic.id)).length} тем начато</span><span>{overall}% общего прогресса</span></div>
       </section>
 
       <section className="catalog-controls" aria-label="Фильтры каталога">
@@ -80,11 +80,11 @@ export function CoursesPage({ progress, activity, activeTraining, userCourses })
         <label><span>Категория</span><select value={category} onChange={event => updateParam('category', event.target.value)}><option value="all">Все категории</option>{categories.map(item => <option value={item} key={item}>{item}</option>)}</select></label>
         <label><span>Состояние</span><select value={status} onChange={event => updateParam('status', event.target.value)}><option value="all">Все курсы</option><option value="active">Активные</option><option value="archived">Архивные</option><option value="available">Не добавлены</option></select></label>
         <label><span>Сортировка</span><select value={sort} onChange={event => updateParam('sort', event.target.value)}><option value="popular">По популярности</option><option value="progress">По прогрессу</option><option value="newest">Сначала новые</option></select></label>
-        {(query || category !== 'all' || status !== 'active' || sort !== 'popular') && <button className="text-button" type="button" onClick={() => setParams({})}>Сбросить</button>}
+        {(query || category !== 'all' || status !== 'all' || sort !== 'popular') && <button className="text-button" type="button" onClick={() => setParams({})}>Сбросить</button>}
       </section>
 
       <div className="section-title home-section-title"><h2>Курсы <span className="count">{visibleCourses.length}</span></h2><span className="muted">Нажмите на курс, чтобы увидеть подробности</span></div>
-      {visibleCourses.length ? <div className="course-grid">{visibleCourses.map(course => <CourseCard key={course.id} course={course} progress={progress} onOpen={openCourse} selected={drawerOpen && drawerCourse?.id === course.id} />)}</div>
+      {visibleCourses.length ? <div className="course-grid">{visibleCourses.map(course => <CourseCard key={course.id} course={course} progress={progress} activity={activity} onOpen={openCourse} selected={drawerOpen && drawerCourse?.id === course.id} />)}</div>
         : <EmptyState title="Курсы не найдены" message="Измените параметры поиска или сбросьте фильтры." action={<button className="button secondary" onClick={() => setParams({})}>Сбросить фильтры</button>} />}
       <CourseDrawer course={drawerCourse} progress={progress} open={drawerOpen} onClose={() => setDrawerOpen(false)} />
 

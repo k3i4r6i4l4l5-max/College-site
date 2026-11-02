@@ -1,5 +1,5 @@
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || 'playwright');
-const scenarios = [require('./e2e/auth.cjs'), require('./e2e/catalog.cjs'), require('./e2e/training.cjs'), require('./e2e/plans.cjs')];
+const scenarios = [require('./e2e/auth.cjs'), require('./e2e/statistics.cjs'), require('./e2e/catalog.cjs'), require('./e2e/training.cjs'), require('./e2e/plans.cjs')];
 
 (async () => {
   const browser = await chromium.launch({ headless: true, channel: 'msedge' });

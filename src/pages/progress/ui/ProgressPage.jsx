@@ -14,7 +14,7 @@ export function ProgressPage({ activity, progress }) {
   const [courseId, setCourseId] = useState('java');
   const course = courses.find(item => item.id === courseId);
   const selectedTopics = course.topics.map(topicById);
-  const weakTopics = selectedTopics.filter(topic => progress[topic.id] < 50);
+  const weakTopics = selectedTopics.filter(topic => activity.some(entry => entry.topicId === topic.id) && progress[topic.id] < 50);
   const recommendedTopics = [...selectedTopics]
     .sort((a, b) => progress[a.id] - progress[b.id])
     .slice(0, 2);
@@ -62,7 +62,7 @@ export function ProgressPage({ activity, progress }) {
                 </Link>
               </>
             ) : (
-              <p>Все темы освоены как минимум на 50%. Продолжайте закреплять знания.</p>
+              <p>Тем со слабыми результатами пока нет. Занимайтесь, чтобы получить рекомендации.</p>
             )}
           </section>
           <section className="recommended">

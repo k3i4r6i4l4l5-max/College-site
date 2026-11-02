@@ -5,11 +5,11 @@ import { getCourseKnowledgeCounts } from '../../../entities/progress';
 import { useCatalog } from '../../../entities/catalog';
 
 /** Отображает крупную карточку курса с общим прогрессом и распределением знаний. */
-export function CourseCard({ course, progress, onOpen, selected }) {
+export function CourseCard({ course, progress, activity = [], onOpen, selected }) {
   const { topicById } = useCatalog();
   // Среднее по темам используется как общий процент прохождения курса.
   const value = average(course.topics.map(id => progress[id]));
-  const knowledge = getCourseKnowledgeCounts(course, progress, topicById);
+  const knowledge = getCourseKnowledgeCounts(course, activity, topicById);
 
   return (
     <article className={`course-tile ${selected ? 'selected' : ''}`}>
